@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Bunchkins.Domain.Cards.Monsters.Monster" Collapsed="true">
+    <Position X="2.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAQAAAAAAAAAAAAABRAAAAAAIAAA=</HashCode>
+      <FileName>Domain\Cards\Door\Monsters\Monster.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bunchkins.Domain.Cards.Monsters.DeathMonster" Collapsed="true">
+    <Position X="2.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Domain\Cards\Door\Monsters\DeathMonster.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bunchkins.Domain.Cards.Spells.DoorSpell" Collapsed="true">
+    <Position X="5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Domain\Cards\Door\Spells\DoorSpell.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bunchkins.Domain.Cards.Spells.OutToLunchSpell" Collapsed="true">
+    <Position X="5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Domain\Cards\Door\Spells\OutToLunchSpell.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bunchkins.Domain.Cards.DoorCard" Collapsed="true">
+    <Position X="3.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Domain\Cards\Door\DoorCard.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bunchkins.Domain.Cards.TreasureCard" Collapsed="true">
+    <Position X="7.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Domain\Cards\Treasure\TreasureCard.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bunchkins.Domain.Cards.Card" Collapsed="true">
+    <Position X="5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAwAAAAAAAAAAQAAAAAAAAAAAAAAAgAAAA=</HashCode>
+      <FileName>Domain\Cards\Card.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bunchkins.Domain.Cards.Treasure.Spells.TreasureSpell" Collapsed="true">
+    <Position X="7.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Domain\Cards\Treasure\Spells\TreasureSpell.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
