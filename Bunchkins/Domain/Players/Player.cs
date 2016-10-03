@@ -1,4 +1,6 @@
 ﻿using Bunchkins.Domain.Cards;
+using Bunchkins.Domain.Cards.Treasure.Equipment;
+using Bunchkins.Domain.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,16 +9,27 @@ using System.Threading.Tasks;
 
 namespace Bunchkins.Domain.Players
 {
-    public class Player
+    public class Player : ITarget
     {
         public int PlayerId { get; set; }
+
+        public int? GameId { get; set; }
 
         public int Level { get; set; }
 
         public virtual ICollection<Card> Hand { get; set; }
 
-        public virtual ICollection<Card> Equipped { get; set; }
-        
+        public virtual ICollection<EquippedCard> EquippedCards { get; set; }
+
+        public virtual Game Game { get; set; }
+
+        public bool IsActive { get; set; }
+
+        public int GetCombatPower()
+        {
+            return EquippedCards.Sum(c => c.EquipmentCard.Bonus) + Level;
+        }
+
         public void Die()
         {
             Hand.Clear();
@@ -49,9 +62,9 @@ namespace Bunchkins.Domain.Players
         {
             foreach(var slot in slots)
             {
-                foreach(var card in Equipped)
+                foreach(var card in EquippedCards.Select(ec => ec.EquipmentCard))
                 {
-                    if(card.slot == slot)
+                    if(card.Slot == slot)
                     {
                         // TODO: Lose armor
                     }

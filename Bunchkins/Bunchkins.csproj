@@ -34,7 +34,16 @@
   </PropertyGroup>
   <PropertyGroup />
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -46,34 +55,56 @@
   <ItemGroup>
     <Compile Include="Domain\Cards\Card.cs" />
     <Compile Include="Domain\Cards\Door\DoorCard.cs" />
-    <Compile Include="Domain\Cards\Door\Monsters\ArmorRemoveMonster.cs" />
-    <Compile Include="Domain\Cards\Door\Monsters\LevelDecreaseMonster.cs" />
-    <Compile Include="Domain\Cards\Door\Monsters\Monster.cs" />
-    <Compile Include="Domain\Cards\Door\Monsters\DeathMonster.cs" />
-    <Compile Include="Domain\Cards\Door\Spells\AddMonsterSpell.cs" />
-    <Compile Include="Domain\Cards\Door\Spells\BuffMonsterSpell.cs" />
-    <Compile Include="Domain\Cards\Door\Spells\Curses\LoseEquipCurse.cs" />
-    <Compile Include="Domain\Cards\Door\Spells\Curses\LoseHandCardsCurse.cs" />
-    <Compile Include="Domain\Cards\Door\Spells\Curses\LoseLevelCurse.cs" />
-    <Compile Include="Domain\Cards\Door\Spells\OutToLunchSpell.cs" />
+    <Compile Include="Domain\Cards\Door\Monsters\ArmorRemoveMonsterCard.cs" />
+    <Compile Include="Domain\Cards\Door\Monsters\LevelDecreaseMonsterCard.cs" />
+    <Compile Include="Domain\Cards\Door\Monsters\MonsterCard.cs" />
+    <Compile Include="Domain\Cards\Door\Monsters\DeathMonsterCard.cs" />
+    <Compile Include="Domain\Cards\Door\Spells\AddMonsterSpellCard.cs" />
+    <Compile Include="Domain\Cards\Door\Spells\BuffMonsterSpellDoorCard.cs" />
+    <Compile Include="Domain\Cards\Door\Spells\Curses\LoseEquipCurseCard.cs" />
+    <Compile Include="Domain\Cards\Door\Spells\Curses\LoseHandCardsCurseCard.cs" />
+    <Compile Include="Domain\Cards\Door\Spells\Curses\LoseLevelCurseCard.cs" />
+    <Compile Include="Domain\Cards\Door\Spells\OutToLunchSpellCard.cs" />
     <Compile Include="Domain\Cards\Door\Spells\DoorSpell.cs" />
     <Compile Include="Domain\Cards\IAnytimeSpell.cs" />
     <Compile Include="Domain\Cards\ICombatSpell.cs" />
-    <Compile Include="Domain\Cards\Treasure\Equipment\Equipment.cs" />
-    <Compile Include="Domain\Cards\Treasure\Spells\BuffPlayerSpell.cs" />
-    <Compile Include="Domain\Cards\Treasure\Spells\BuffMonsterSpell.cs" />
-    <Compile Include="Domain\Cards\Treasure\Spells\EscapeSpell.cs" />
-    <Compile Include="Domain\Cards\Treasure\Spells\LevelUpSpell.cs" />
-    <Compile Include="Domain\Cards\Treasure\Spells\RemoveCurseSpell.cs" />
-    <Compile Include="Domain\Cards\Treasure\Spells\TreasureSpell.cs" />
+    <Compile Include="Domain\Cards\Treasure\Equipment\EquipmentCard.cs" />
+    <Compile Include="Domain\Cards\Treasure\Spells\BuffPlayerSpellCard.cs" />
+    <Compile Include="Domain\Cards\Treasure\Spells\BuffMonsterSpellTreasureCard.cs" />
+    <Compile Include="Domain\Cards\Treasure\Spells\EscapeSpellCard.cs" />
+    <Compile Include="Domain\Cards\Treasure\Spells\LevelUpSpellCard.cs" />
+    <Compile Include="Domain\Cards\Treasure\Spells\RemoveCurseSpellCard.cs" />
+    <Compile Include="Domain\Cards\Treasure\Spells\TreasureSpellCard.cs" />
     <Compile Include="Domain\Cards\Treasure\TreasureCard.cs" />
+    <Compile Include="Domain\Core\Game.cs" />
+    <Compile Include="Domain\Core\GameStates\CombatState.cs" />
+    <Compile Include="Domain\Core\GameStates\DrawState.cs" />
+    <Compile Include="Domain\Core\GameStates\EndState.cs" />
+    <Compile Include="Domain\Core\GameStates\IGameState.cs" />
+    <Compile Include="Domain\Core\GameStates\LootState.cs" />
+    <Compile Include="Domain\Core\GameStates\StartState.cs" />
+    <Compile Include="Domain\Core\Input.cs" />
+    <Compile Include="Domain\ITarget.cs" />
+    <Compile Include="Domain\Players\EquippedCard.cs" />
     <Compile Include="Domain\Players\Player.cs" />
+    <Compile Include="Infrastructure\BunchkinsDataContext.cs" />
+    <Compile Include="Migrations\201610032117034_InitialCreate.cs" />
+    <Compile Include="Migrations\201610032117034_InitialCreate.Designer.cs">
+      <DependentUpon>201610032117034_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="ClassDiagram1.cd" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201610032117034_InitialCreate.resx">
+      <DependentUpon>201610032117034_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

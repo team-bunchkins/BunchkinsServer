@@ -10,6 +10,6 @@ namespace Bunchkins.Domain.Cards
 {
     public interface ICombatSpell
     {
-        void Cast(Player player, Monster[] monsters);
+        void Cast(Player player, MonsterCard[] monsters);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bunchkins.Domain.Players;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,11 +9,11 @@ namespace Bunchkins.Domain.Cards
 {
     public abstract class Card
     {
-        internal string slot;
-
         public int CardId { get; set; }
         public string PictureUrl { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+
+        public virtual ICollection<Player> PlayersHands { get; set; }
     }
 }
