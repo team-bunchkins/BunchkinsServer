@@ -5,6 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Bunchkins.Domain.Cards;
 using Bunchkins.Domain.Players;
+using Bunchkins.Domain.Cards.Door;
+using Bunchkins.Domain.Cards.Door.Monsters;
+using Bunchkins.Domain.Cards.Door.Spells.Curses;
 
 namespace Bunchkins.Domain.Core.GameStates
 {
@@ -17,7 +20,23 @@ namespace Bunchkins.Domain.Core.GameStates
 
         public void Initialize(Game game)
         {
-            throw new NotImplementedException();
+            DoorCard card = game.DrawDoorCard();
+            if( card is MonsterCard )
+            {
+                //COMBAT DAT MONSTER
+            }
+            else if ( card is CurseCard )
+            {
+                //CURSE DAT PLAYA PLAYA
+                //COMBAT DAT MONSTER???
+            }
+            else
+            {
+                //ADD TO HAND
+                game.ActivePlayer.Hand.Add(card);
+
+                //COMBAT DAT MONSTER???
+            }
         }
 
         public void PlayCard(Player player, ITarget target, Card card)

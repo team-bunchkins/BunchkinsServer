@@ -13,6 +13,5 @@ namespace Bunchkins.Domain.Cards.Treasure.Equipment
         public int Bonus { get; set; }
         public List<string> RestrictedTo { get; set; }
 
-        public virtual ICollection<EquippedCard> PlayersEquippingThisCard { get; set; }
     }
 }

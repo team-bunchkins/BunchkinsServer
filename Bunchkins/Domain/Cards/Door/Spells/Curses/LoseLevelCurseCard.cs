@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Bunchkins.Domain.Cards.Door.Spells.Curses
 {
-    class LoseLevelCurseCard : DoorSpell, IAnytimeSpell
+    class LoseLevelCurseCard : CurseCard, IAnytimeSpell
     {
         public void Cast(Player player)
         {

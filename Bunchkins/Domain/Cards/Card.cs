@@ -14,6 +14,5 @@ namespace Bunchkins.Domain.Cards
         public string Name { get; set; }
         public string Description { get; set; }
 
-        public virtual ICollection<Player> PlayersHands { get; set; }
     }
 }

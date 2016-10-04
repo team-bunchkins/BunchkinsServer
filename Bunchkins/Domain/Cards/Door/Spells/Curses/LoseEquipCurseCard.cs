@@ -7,7 +7,7 @@ using Bunchkins.Domain.Players;
 
 namespace Bunchkins.Domain.Cards.Door.Spells.Curses
 {
-    class LoseEquipCurseCard : DoorSpell, IAnytimeSpell
+    class LoseEquipCurseCard : CurseCard, IAnytimeSpell
     {
         public void Cast(Player player)
         {

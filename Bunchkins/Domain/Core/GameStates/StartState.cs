@@ -11,6 +11,8 @@ namespace Bunchkins.Domain.Core.GameStates
 {
     class StartState : IGameState
     {
+        //TODO: handle game states?
+
         public IGameState HandleInput(Player player, Input input)
         {
             if (input == PASS)
@@ -25,7 +27,7 @@ namespace Bunchkins.Domain.Core.GameStates
 
         public void Initialize(Game game)
         {
-            throw new NotImplementedException();
+            game.NextPlayer();
         }
 
         public void PlayCard(Player player, ITarget target, Card card)

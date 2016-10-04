@@ -13,7 +13,7 @@ namespace Bunchkins.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201610032117034_InitialCreate"; }
+            get { return "201610032335496_InitialCreate"; }
         }
         
         string IMigrationMetadata.Source

@@ -19,27 +19,6 @@ namespace Bunchkins.Infrastructure
         }
 
         public IDbSet<Card> Cards { get; set; }
-        public IDbSet<Game> Games { get; set; }
-        public IDbSet<Player> Players { get; set; }
 
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Player>()
-                        .HasMany(p => p.Hand)
-                        .WithMany(c => c.PlayersHands);
-
-            modelBuilder.Entity<Player>()
-                        .HasMany(p => p.EquippedCards)
-                        .WithRequired(ec => ec.Player)
-                        .HasForeignKey(ec => ec.PlayerId);
-
-            modelBuilder.Entity<EquipmentCard>()
-                        .HasMany(ec => ec.PlayersEquippingThisCard)
-                        .WithRequired(ec => ec.EquipmentCard)
-                        .HasForeignKey(ec => ec.EquipmentCardId);
-
-            modelBuilder.Entity<EquippedCard>()
-                        .HasKey(ec => new { ec.EquipmentCardId, ec.PlayerId });
-        }
     }
 }

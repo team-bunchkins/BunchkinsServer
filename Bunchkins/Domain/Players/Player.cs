@@ -13,21 +13,17 @@ namespace Bunchkins.Domain.Players
     {
         public int PlayerId { get; set; }
 
-        public int? GameId { get; set; }
-
         public int Level { get; set; }
 
-        public virtual ICollection<Card> Hand { get; set; }
+        public List<Card> Hand { get; set; }
 
-        public virtual ICollection<EquippedCard> EquippedCards { get; set; }
-
-        public virtual Game Game { get; set; }
+        public List<EquipmentCard> EquippedCards { get; set; }
 
         public bool IsActive { get; set; }
 
         public int GetCombatPower()
         {
-            return EquippedCards.Sum(c => c.EquipmentCard.Bonus) + Level;
+            return EquippedCards.Sum(c => c.Bonus) + Level;
         }
 
         public void Die()
@@ -62,7 +58,7 @@ namespace Bunchkins.Domain.Players
         {
             foreach(var slot in slots)
             {
-                foreach(var card in EquippedCards.Select(ec => ec.EquipmentCard))
+                foreach(var card in EquippedCards)
                 {
                     if(card.Slot == slot)
                     {
