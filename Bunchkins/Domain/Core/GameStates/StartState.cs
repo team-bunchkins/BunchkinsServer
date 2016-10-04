@@ -9,28 +9,22 @@ using static Bunchkins.Domain.Core.Input;
 
 namespace Bunchkins.Domain.Core.GameStates
 {
-    class StartState : IGameState
+    public class StartState : GameState
     {
-        //TODO: handle game states?
-
-        public IGameState HandleInput(Player player, Input input)
-        {
-            if (input == PASS)
-            {
-                return new DrawState();
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        public void Initialize(Game game)
+        public StartState(Game game) : base(game)
         {
             game.NextPlayer();
         }
 
-        public void PlayCard(Player player, ITarget target, Card card)
+        public override void HandleInput(Player player, Input input)
+        {
+            if (input == PASS)
+            {
+                Game.SetState(new DrawState(Game));
+            }
+        }
+
+        public override void PlayCard(Player player, ITarget target, Card card)
         {
             throw new NotImplementedException();
         }

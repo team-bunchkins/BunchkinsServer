@@ -8,19 +8,13 @@ using Bunchkins.Domain.Players;
 
 namespace Bunchkins.Domain.Core.GameStates
 {
-    class LootState : IGameState
+    public abstract class LootState : GameState
     {
-        public IGameState HandleInput(Player player, Input input)
+        public LootState(Game game) : base(game)
         {
-            throw new NotImplementedException();
         }
 
-        public void Initialize(Game game)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void PlayCard(Player player, ITarget target, Card card)
+        public override void HandleInput(Player player, Input input)
         {
             throw new NotImplementedException();
         }

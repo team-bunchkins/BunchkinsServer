@@ -11,21 +11,16 @@ using Bunchkins.Domain.Cards.Door.Spells.Curses;
 
 namespace Bunchkins.Domain.Core.GameStates
 {
-    class DrawState : IGameState
+    class DrawState : GameState
     {
-        public IGameState HandleInput(Player player, Input input)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Initialize(Game game)
+        public DrawState(Game game) : base(game)
         {
             DoorCard card = game.DrawDoorCard();
-            if( card is MonsterCard )
+            if (card is MonsterCard)
             {
-                //COMBAT DAT MONSTER
+                Game.SetState(new CombatState(Game, (MonsterCard) card));
             }
-            else if ( card is CurseCard )
+            else if (card is CurseCard)
             {
                 //CURSE DAT PLAYA PLAYA
                 //COMBAT DAT MONSTER???
@@ -39,7 +34,14 @@ namespace Bunchkins.Domain.Core.GameStates
             }
         }
 
-        public void PlayCard(Player player, ITarget target, Card card)
+        public override void HandleInput(Player player, Input input)
+        {
+            throw new NotImplementedException();
+        }
+
+        
+
+        public override void PlayCard(Player player, ITarget target, Card card)
         {
             throw new NotImplementedException();
         }

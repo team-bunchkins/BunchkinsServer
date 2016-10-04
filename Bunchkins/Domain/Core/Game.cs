@@ -16,7 +16,7 @@ namespace Bunchkins.Domain.Core
     public class Game
     {
         public int GameId { get; set; }
-        public IGameState State { get; private set; }
+        public GameState State { get; private set; }
         public IEnumerator<Player> mPlayerIterator;
         public List<Player> Players { get; set; }
 
@@ -44,7 +44,8 @@ namespace Bunchkins.Domain.Core
 
         public void Start()
         {
-            State = new StartState();
+            Players.First().IsActive = true;
+            State = new StartState(this);
         }
 
         IEnumerable<Player> CreatePlayerIterator()
@@ -60,18 +61,12 @@ namespace Bunchkins.Domain.Core
 
         public void HandleInput(Player player, Input input)
         {
-            IGameState newState = State.HandleInput(player, input);
-            if (newState != null)
-            {
-                InitializeState(newState);
-            }
+            State.HandleInput(player, input);
         }
 
-        public void InitializeState(IGameState state)
+        public void SetState(GameState state)
         {
-            // TODO: destroy current State?
             State = state;
-            State.Initialize(this);
         }
 
         public DoorCard DrawDoorCard()
@@ -79,6 +74,7 @@ namespace Bunchkins.Domain.Core
             using (var db = new BunchkinsDataContext())
             {
                 return db.Cards.OfType<DoorCard>().GetRandomElement(c => c.CardId);
+                // TODO: check whether card already exists in players' hand
             }
         }
 
