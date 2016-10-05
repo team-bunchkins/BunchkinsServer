@@ -76,9 +76,11 @@
     <Compile Include="Domain\Cards\Treasure\Spells\LevelUpSpellCard.cs" />
     <Compile Include="Domain\Cards\Treasure\Spells\RemoveCurseSpellCard.cs" />
     <Compile Include="Domain\Cards\Treasure\Spells\TreasureSpellCard.cs" />
+    <Compile Include="Domain\Cards\Treasure\Spells\VanquishMonsterSpellCard.cs" />
     <Compile Include="Domain\Cards\Treasure\TreasureCard.cs" />
     <Compile Include="Domain\Core\Game.cs" />
     <Compile Include="Domain\Core\GameStates\CombatState.cs" />
+    <Compile Include="Domain\Core\GameStates\DoorLootState.cs" />
     <Compile Include="Domain\Core\GameStates\DrawState.cs" />
     <Compile Include="Domain\Core\GameStates\EndState.cs" />
     <Compile Include="Domain\Core\GameStates\GameState.cs" />

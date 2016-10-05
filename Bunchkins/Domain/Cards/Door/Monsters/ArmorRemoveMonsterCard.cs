@@ -13,7 +13,7 @@ namespace Bunchkins.Domain.Cards.Door.Monsters
 
         public override void BadStuff(Player player)
         {
-            player.LoseArmor(Slots);
+            player.RemoveEquip(Slots);
         }
     }
 }

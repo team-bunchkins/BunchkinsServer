@@ -39,11 +39,5 @@ namespace Bunchkins.Domain.Core.GameStates
             throw new NotImplementedException();
         }
 
-        
-
-        public override void PlayCard(Player player, ITarget target, Card card)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

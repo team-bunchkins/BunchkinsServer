@@ -14,6 +14,8 @@ namespace Bunchkins.Domain.Core.GameStates
             {
                 Game.ActivePlayer.Hand.Add(Game.DrawTreasureCard());
             }
+
+            Game.SetState(new EndState(Game));
         }
     }
 }

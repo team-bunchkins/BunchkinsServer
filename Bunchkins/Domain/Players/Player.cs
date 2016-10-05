@@ -13,7 +13,7 @@ namespace Bunchkins.Domain.Players
     {
         public int PlayerId { get; set; }
 
-        public int Level { get; set; }
+        public int Level { get; private set; }
 
         public List<Card> Hand { get; set; }
 
@@ -21,20 +21,20 @@ namespace Bunchkins.Domain.Players
 
         public bool IsActive { get; set; }
 
-        public int GetCombatPower()
-        {
-            return EquippedCards.Sum(c => c.Bonus) + Level;
+        public int CombatPower
+        {  
+            get
+            {
+                return EquippedCards.Sum(c => c.Bonus) + Level;
+            }
         }
 
         public void Die()
         {
             Hand.Clear();
 
-            //TODO: Write logic to clear players equipped cards when they die.
-            //foreach (var card in Equipped)
-            //{
-            //    if(card.GetType() != typeof(ClassCard))
-            //}
+            // TODO: Do not remove race/class cards
+            EquippedCards.Clear();
         }
 
         public void DecreaseLevel(int levels)
@@ -54,17 +54,17 @@ namespace Bunchkins.Domain.Players
             Level += levels; 
         }
 
-        public void LoseArmor(List<string> slots)
+        public void EquipItem(EquipmentCard equipment)
+        {
+            EquippedCards.RemoveAll(e => e.Slot == equipment.Slot);
+            EquippedCards.Add(equipment);
+        }
+
+        public void RemoveEquip(List<string> slots)
         {
             foreach(var slot in slots)
             {
-                foreach(var card in EquippedCards)
-                {
-                    if(card.Slot == slot)
-                    {
-                        // TODO: Lose armor
-                    }
-                }
+                EquippedCards.RemoveAll(e => e.Slot == slot);
             }
         }
 

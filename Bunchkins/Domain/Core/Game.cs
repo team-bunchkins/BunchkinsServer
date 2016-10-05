@@ -19,8 +19,7 @@ namespace Bunchkins.Domain.Core
         public GameState State { get; private set; }
         public IEnumerator<Player> mPlayerIterator;
         public List<Player> Players { get; set; }
-
-        private Random mRandomGenerator = new Random();
+        public Random RandomGenerator = new Random();
         public Player ActivePlayer
         {
             get
@@ -29,23 +28,19 @@ namespace Bunchkins.Domain.Core
             }
         }
 
-        public void NextPlayer()
-        {
-            // TODO: Move mPlayerIterator instantiation to game initialization
-            if (mPlayerIterator == null)
-            {
-                mPlayerIterator = CreatePlayerIterator().GetEnumerator();
-            }
-
-            ActivePlayer.IsActive = false;
-            mPlayerIterator.MoveNext();
-            mPlayerIterator.Current.IsActive = true;
-        }
-
         public void Start()
         {
             Players.First().IsActive = true;
+            mPlayerIterator = CreatePlayerIterator().GetEnumerator();
+
             State = new StartState(this);
+        }
+
+        public void NextPlayer()
+        {
+            ActivePlayer.IsActive = false;
+            mPlayerIterator.MoveNext();
+            mPlayerIterator.Current.IsActive = true;
         }
 
         IEnumerable<Player> CreatePlayerIterator()
@@ -73,8 +68,22 @@ namespace Bunchkins.Domain.Core
         {
             using (var db = new BunchkinsDataContext())
             {
-                return db.Cards.OfType<DoorCard>().GetRandomElement(c => c.CardId);
-                // TODO: check whether card already exists in players' hand
+                bool isInHand = false;
+                DoorCard card;
+
+                do
+                {
+                    card = db.Cards.OfType<DoorCard>().GetRandomElement(c => c.CardId);
+                    isInHand = false;
+
+                    // TODO: check whether card already exists in players' hand/equips
+                    if (Players.Exists(p => p.Hand.Contains(card)))
+                    {
+                        isInHand = true;
+                    }
+                } while (isInHand);
+
+                return card;
             }
         }
 
