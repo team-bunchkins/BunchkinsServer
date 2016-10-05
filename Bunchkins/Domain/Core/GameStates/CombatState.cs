@@ -69,7 +69,8 @@ namespace Bunchkins.Domain.Core.GameStates
 
         public void AddMonster()
         {
-
+            MonsterCard monster = Game.DrawMonsterCard();
+            Monsters.Add(monster);
         }
 
         public void RemoveMonster(MonsterCard monster, bool isLootable)

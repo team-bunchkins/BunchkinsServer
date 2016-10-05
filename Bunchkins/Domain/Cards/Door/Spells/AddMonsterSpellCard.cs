@@ -13,7 +13,7 @@ namespace Bunchkins.Domain.Cards.Door.Spells
     {
         public void Cast(CombatState combat)
         {
-            throw new NotImplementedException();
+            combat.AddMonster();
         }
     }
 }

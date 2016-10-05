@@ -1,5 +1,6 @@
 ﻿using Bunchkins.Domain.Cards;
 using Bunchkins.Domain.Cards.Door;
+using Bunchkins.Domain.Cards.Door.Monsters;
 using Bunchkins.Domain.Core.GameStates;
 using Bunchkins.Domain.Players;
 using Bunchkins.Infrastructure;
@@ -76,7 +77,7 @@ namespace Bunchkins.Domain.Core
                     card = db.Cards.OfType<DoorCard>().GetRandomElement(c => c.CardId);
                     isInHand = false;
 
-                    // TODO: check whether card already exists in players' hand/equips
+                    // check whether card already exists in players' hand/equips
                     if (Players.Exists(p => p.Hand.Contains(card)))
                     {
                         isInHand = true;
@@ -91,8 +92,31 @@ namespace Bunchkins.Domain.Core
         {
             using (var db = new BunchkinsDataContext())
             {
-                return db.Cards.OfType<TreasureCard>().GetRandomElement(c => c.CardId);
+                bool isInHand = false;
+                TreasureCard card;
+
+                do
+                {
+                    card = db.Cards.OfType<TreasureCard>().GetRandomElement(c => c.CardId);
+                    isInHand = false;
+
+                    // check whether card already exists in players' hand/equips
+                    if (Players.Exists(p => p.Hand.Contains(card)) || Players.Exists(p => p.EquippedCards.Contains(card)))
+                    {
+                        isInHand = true;
+                    }
+                } while (isInHand);
+
+                return card;
             }
         }
+        public MonsterCard DrawMonsterCard()
+        {
+            using (var db = new BunchkinsDataContext())
+            {
+                return db.Cards.OfType<MonsterCard>().GetRandomElement(c => c.CardId);
+            }
+        }
+
     }
 }

@@ -5,12 +5,16 @@ using System;
 
 namespace Bunchkins.Domain.Cards.Treasure.Spells
 {
-    class EscapeSpellCard : TreasureSpellCard, ICombatSpell
+    class EscapeAllSpellCard : TreasureSpellCard, ICombatSpell
     {
+        // Removes all monsters from combat, monsters' treasure is not lootable
         public void Cast(CombatState combat)
         {
-            throw new NotImplementedException();
             //Make monsters in combat go away
+            foreach (MonsterCard monster in combat.Monsters)
+            {
+                combat.RemoveMonster(monster, false);
+            }
         }
     }
 }

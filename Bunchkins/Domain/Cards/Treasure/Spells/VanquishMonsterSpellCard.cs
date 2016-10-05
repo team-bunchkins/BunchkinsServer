@@ -9,10 +9,11 @@ namespace Bunchkins.Domain.Cards.Treasure.Spells
 {
     class VanquishMonsterSpellCard : TreasureSpellCard, ICombatSpell
     {
+        // Removes monster from combat, monster's treasure is lootable
         public void Cast(CombatState combat)
         {
-            // TODO: How do para-meter for RemoveMonster?
-            //combat.RemoveMonster();
+            // TODO: Target specific monster
+            combat.RemoveMonster(combat.Monsters.OrderByDescending(m => m.Level).First(), true);
         }
     }
 }

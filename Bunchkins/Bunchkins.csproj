@@ -65,7 +65,6 @@
     <Compile Include="Domain\Cards\Door\Spells\Curses\LoseEquipCurseCard.cs" />
     <Compile Include="Domain\Cards\Door\Spells\Curses\LoseHandCardsCurseCard.cs" />
     <Compile Include="Domain\Cards\Door\Spells\Curses\LoseLevelCurseCard.cs" />
-    <Compile Include="Domain\Cards\Door\Spells\OutToLunchSpellCard.cs" />
     <Compile Include="Domain\Cards\Door\Spells\DoorSpell.cs" />
     <Compile Include="Domain\Cards\IAnytimeSpell.cs" />
     <Compile Include="Domain\Cards\ICombatSpell.cs" />
