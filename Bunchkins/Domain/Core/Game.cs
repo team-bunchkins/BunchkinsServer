@@ -16,7 +16,7 @@ namespace Bunchkins.Domain.Core
 {
     public class Game
     {
-        public int GameId { get; set; }
+        public Guid GameId { get; set; }
         public GameState State { get; private set; }
         public IEnumerator<Player> mPlayerIterator;
         public List<Player> Players { get; set; }
@@ -29,10 +29,25 @@ namespace Bunchkins.Domain.Core
             }
         }
 
+        public Game()
+        {
+            GameId = Guid.NewGuid();
+            Players = new List<Player>();
+        }
+
         public void Start()
         {
             Players.First().IsActive = true;
             mPlayerIterator = CreatePlayerIterator().GetEnumerator();
+
+            // Draw hands for players
+            foreach (Player player in Players)
+            {
+                player.Hand.Add(DrawDoorCard());
+                player.Hand.Add(DrawDoorCard());
+                player.Hand.Add(DrawTreasureCard());
+                player.Hand.Add(DrawTreasureCard());
+            }
 
             State = new StartState(this);
         }
@@ -110,6 +125,27 @@ namespace Bunchkins.Domain.Core
                 return card;
             }
         }
+
+        // Draw door cards, excluding monsters
+        public DoorCard DrawDoorCardForHand()
+        {
+           
+            DoorCard card;
+            bool isMonster = true;
+
+            do
+            {
+                card = DrawDoorCard();
+
+                if (!(card is MonsterCard))
+                {
+                    isMonster = false;
+                }
+            } while (isMonster);
+
+            return card;
+        }
+
         public MonsterCard DrawMonsterCard()
         {
             using (var db = new BunchkinsDataContext())
