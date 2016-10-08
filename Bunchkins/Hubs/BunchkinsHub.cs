@@ -6,9 +6,11 @@ using Microsoft.AspNet.SignalR;
 using System.Threading.Tasks;
 using Bunchkins.Domain.Core;
 using Bunchkins.Domain.Players;
+using Microsoft.AspNet.SignalR.Hubs;
 
 namespace Bunchkins.Hubs
 {
+    [HubName("bunchkinsHub")]
     public class BunchkinsHub : Hub
     {
         #region Connection management
@@ -38,21 +40,33 @@ namespace Bunchkins.Hubs
 
         public void CreateGame(string playerName)
         {
-            var player = new Player
+            Player player;
+            
+            if (!GameManager.Instance.Players.Any(x => x.Name == playerName))
             {
-                Name = playerName,
-                ConnectionId = Context.ConnectionId
-            };
+                player = new Player
+                {
+                    Name = playerName,
+                    ConnectionId = Context.ConnectionId
+                };
 
-            var game = new Game();
-            game.Players.Add(player);
-            Groups.Add(player.ConnectionId, game.GameId.ToString());
+                Game game = GameManager.Instance.CreateGame(player);
+
+                Groups.Add(player.ConnectionId, game.GameId.ToString());
+                Clients.Caller.callerJoined(game.GameId);
+            }
+            else
+            {
+                Clients.Caller.displayError("Username already exists.");
+                return;
+            }
         }
 
         public void JoinGame(string name, Guid gameId)
         {
             Player player;
 
+            // Check if username already exists
             if (!GameManager.Instance.Players.Any(x => x.Name == name))
             {
                 player = new Player
@@ -74,19 +88,18 @@ namespace Bunchkins.Hubs
                 Clients.Caller.displayError("Could not find game.");
                 return;
             }
-            else if (game.State == null)
+            else if (game.State != null)
+            {
+                Clients.Caller.displayError("Game is already in progress!");
+            }
+            else
             {
                 game.Players.Add(player);
                 GameManager.Instance.Players.Add(player);
 
+                Clients.Group(game.GameId.ToString()).playerJoined(player, Context.ConnectionId);
                 Groups.Add(player.ConnectionId, game.GameId.ToString());
-
-                Clients.Group(game.GameId.ToString()).joined(player, Context.ConnectionId);
-                Clients.Caller.callerJoined(name);
-            }
-            else
-            {
-                Clients.Caller.displayError("Game is already in progress!");
+                Clients.Caller.callerJoined(gameId, game.Players.Where(p => p.Name != name).Select(p => new { name = p.Name }));
             }
         }
 
@@ -101,10 +114,10 @@ namespace Bunchkins.Hubs
         }
 
 
-        public void Pass(Guid gameId, int playerId)
+        public void Pass(Guid gameId, string playerName)
         {
             var game = GetGame(gameId);
-            var player = GetPlayer(playerId); 
+            var player = GetPlayer(playerName);
 
             if (game != null && game.ActivePlayer.ConnectionId == Context.ConnectionId)
             {
@@ -130,10 +143,10 @@ namespace Bunchkins.Hubs
                 .SingleOrDefault();
         }
 
-        private Player GetPlayer(int playerId)
+        private Player GetPlayer(string name)
         {
             return GameManager.Instance.Players
-                .Where(x => x.PlayerId == playerId)
+                .Where(x => x.Name == name)
                 .SingleOrDefault();
         }
     }

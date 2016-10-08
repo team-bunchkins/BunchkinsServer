@@ -27,5 +27,21 @@ namespace Bunchkins.Domain.Core
         public List<Player> Players { get; set; }
 
         public List<Game> Games { get; set; }
+
+        public Game CreateGame(Player player)
+        {
+            Game game = new Game();
+            Games.Add(game);
+            game.Players.Add(player);
+            Players.Add(player);
+            return game;
+        }
+
+        public bool AddPlayerToGame(Player player, Game game)
+        {
+            game.Players.Add(player);
+            Players.Add(player);
+            return true;
+        }
     }
 }

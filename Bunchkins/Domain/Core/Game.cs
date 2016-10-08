@@ -32,6 +32,7 @@ namespace Bunchkins.Domain.Core
         public Game()
         {
             GameId = Guid.NewGuid();
+            Players = new List<Player>();
         }
 
         public void Start()

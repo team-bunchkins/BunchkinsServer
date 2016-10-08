@@ -33,6 +33,12 @@ namespace Bunchkins.Domain.Players
             }
         }
 
+        public Player()
+        {
+            Hand = new List<Card>();
+            EquippedCards = new List<EquipmentCard>();
+        }
+
         public void Die()
         {
             Hand.Clear();
