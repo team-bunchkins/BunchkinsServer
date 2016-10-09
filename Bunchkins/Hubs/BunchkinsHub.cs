@@ -17,7 +17,7 @@ namespace Bunchkins.Hubs
 
         public override Task OnConnected()
         {
-            // Reconnect player if already logged on
+            // Reconnect player if already logged on?
 
             // TODO: Come back to this - does user retain any other identity info?
             if (!string.IsNullOrEmpty(Context.User.Identity.Name))
@@ -42,23 +42,30 @@ namespace Bunchkins.Hubs
         {
             Player player;
             
-            if (!GameManager.Instance.Players.Any(x => x.Name == playerName))
+            if (GameManager.Instance.Players.Any(x => x.Name == playerName))
+            {
+                Clients.Caller.displayError("Username already exists.");
+                return;
+            } 
+            else if (GameManager.Instance.Players.Any(x => x.ConnectionId == Context.ConnectionId))
+            {
+                Clients.Caller.displayError("User is already in a game.");
+                return;
+            }
+            else 
             {
                 player = new Player
                 {
                     Name = playerName,
-                    ConnectionId = Context.ConnectionId
+                    ConnectionId = Context.ConnectionId,
+                    // Use IsActive to indicate Host
+                    IsActive = true
                 };
 
                 Game game = GameManager.Instance.CreateGame(player);
 
                 Groups.Add(player.ConnectionId, game.GameId.ToString());
                 Clients.Caller.callerJoined(game.GameId);
-            }
-            else
-            {
-                Clients.Caller.displayError("Username already exists.");
-                return;
             }
         }
 
@@ -67,17 +74,23 @@ namespace Bunchkins.Hubs
             Player player;
 
             // Check if username already exists
-            if (!GameManager.Instance.Players.Any(x => x.Name == name))
+            if (GameManager.Instance.Players.Any(x => x.Name == name))
+            {
+                Clients.Caller.displayError("Username already exists.");
+                return; 
+            }
+            else if (GameManager.Instance.Players.Any(x => x.ConnectionId == Context.ConnectionId))
+            {
+                Clients.Caller.displayError("User is already in a game.");
+                return;
+            }
+            else
             {
                 player = new Player
                 {
                     Name = name,
                     ConnectionId = Context.ConnectionId
                 };
-            } else
-            {
-                Clients.Caller.displayError("Username already exists.");
-                return;
             }
 
 

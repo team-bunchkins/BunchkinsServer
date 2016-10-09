@@ -37,7 +37,7 @@ namespace Bunchkins.Domain.Core
 
         public void Start()
         {
-            Players.First().IsActive = true;
+            // Host player is set to ActivePlayer when creating game
             mPlayerIterator = CreatePlayerIterator().GetEnumerator();
 
             // Draw hands for players
