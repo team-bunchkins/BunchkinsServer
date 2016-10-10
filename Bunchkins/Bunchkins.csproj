@@ -132,6 +132,7 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Domain\Cards\Card.cs" />
     <Compile Include="Domain\Cards\Door\DoorCard.cs" />
     <Compile Include="Domain\Cards\Door\Monsters\ArmorRemoveMonsterCard.cs" />
