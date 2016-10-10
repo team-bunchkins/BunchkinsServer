@@ -9,10 +9,10 @@ namespace Bunchkins.Domain.Cards.Door.Spells.Curses
 {
    public class LoseLevelCurseCard : CurseCard, IAnytimeSpell
     {
-        public int Level { get; set; }
+        public int Levels { get; set; }
         public void Cast(Player player)
         {
-           player.DecreaseLevel(Level);
+           player.DecreaseLevel(Levels);
         }
     }
 }

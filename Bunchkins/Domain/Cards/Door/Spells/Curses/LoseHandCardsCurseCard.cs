@@ -9,10 +9,10 @@ namespace Bunchkins.Domain.Cards.Door.Spells.Curses
 {
     class LoseHandCardsCurseCard : CurseCard, IAnytimeSpell
     {
-        public List<Card> Hand { get; set; }
+        public int NumCards { get; set; }
         public void Cast(Player player)
         {
-            player.Hand.Clear();
+            player.RemoveHandCards(NumCards);
         }
     }
 }
