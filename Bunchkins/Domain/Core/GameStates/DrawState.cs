@@ -8,6 +8,7 @@ using Bunchkins.Domain.Players;
 using Bunchkins.Domain.Cards.Door;
 using Bunchkins.Domain.Cards.Door.Monsters;
 using Bunchkins.Domain.Cards.Door.Spells.Curses;
+using static Bunchkins.Domain.Core.Input;
 
 namespace Bunchkins.Domain.Core.GameStates
 {
@@ -22,7 +23,7 @@ namespace Bunchkins.Domain.Core.GameStates
             }
             else if (card is CurseCard)
             {
-                //CURSE DAT PLAYA PLAYA
+                //CURSE DAT PLAYA, PLAYA
                 //COMBAT DAT MONSTER???
             }
             else
@@ -36,7 +37,15 @@ namespace Bunchkins.Domain.Core.GameStates
 
         public override void HandleInput(Player player, Input input)
         {
-            throw new NotImplementedException();
+            if (input == FIGHT)
+            {
+                MonsterCard card = Game.DrawMonsterCard();
+                Game.SetState(new CombatState(Game, card));
+            }
+            else if (input == PROCEED)
+            {
+                Game.SetState(new DoorLootState(Game));
+            }
         }
 
     }
