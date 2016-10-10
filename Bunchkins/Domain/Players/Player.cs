@@ -1,5 +1,6 @@
 ﻿using Bunchkins.Domain.Cards;
 using Bunchkins.Domain.Cards.Treasure.Equipment;
+using Bunchkins.Extension;
 using Bunchkins.Domain.Core;
 using System;
 using System.Collections.Generic;
@@ -76,6 +77,19 @@ namespace Bunchkins.Domain.Players
             {
                 EquippedCards.RemoveAll(e => e.Slot == slot);
             }
+        }
+
+        public void RemoveHandCards(int numCards)
+        {
+            var rand = new Random();
+
+            for (int i = 0; i < numCards; i++)
+            {
+                var index = (int)(rand.NextDouble() * Hand.Count());
+                Hand.RemoveAt(index);
+                // Hand.GetRandomElement(c => c.CardId);
+            }
+            
         }
 
     }
