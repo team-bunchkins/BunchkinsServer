@@ -15,31 +15,50 @@ namespace Bunchkins.Domain.Core.GameStates
         public List<MonsterCard> Monsters { get; private set; }
         public int MonsterCombatBonus { get; private set; }
         public int PlayerCombatBonus { get; private set; }
-        public int PlayersPassed { get; set; }
+        public List<Player> PlayersPassed { get; set; }
         public int PileOfTreasures { get; private set; }
 
         public CombatState(Game game, MonsterCard monster) : base(game)
         {
             Monsters = new List<MonsterCard>();
             Monsters.Add(monster);
+
+            PlayersPassed = new List<Player>();
         }
 
         public override void HandleInput(Player player, Input input)
         {
             if (input == RUN)
             {
-                Game.RandomGenerator.Next(1, 7);
-                // Bad stuff
+                foreach (MonsterCard monster in Monsters)
+                {
+                    int diceRoll = Game.RandomGenerator.Next(1, 7);
+                    if (diceRoll < 5 && Game.ActivePlayer.Level >= monster.MinPursuitLevel)
+                    {
+                        // Bad Stuff!
+                        monster.BadStuff(Game.ActivePlayer);
+                    }
+                    else
+                    {
+                        // Player escaped!
+
+                    }
+                }
+
+                Game.SetState(new EndState(Game));
             }
-            else if (input == PROCEED)
+            else if (input == PASS && !PlayersPassed.Any(p => p.Name == player.Name))
             {
-                // TODO: MAYBE it should be a list of passed players instead?
-                PlayersPassed++;
-                
-                if ((PlayersPassed == Game.Players.Count()) && (player == Game.ActivePlayer)) {
+                PlayersPassed.Add(player);
+            }
+            else if (input == PROCEED && PlayersPassed.Count() == Game.Players.Count() - 1)
+            {
+                if (Game.ActivePlayer.CombatPower + PlayerCombatBonus > Monsters.Sum(m => m.Level) + MonsterCombatBonus)
+                {
                     int treasures = Monsters.Sum(m => m.TreasureGain);
                     Game.SetState(new TreasureLootState(Game, treasures));
                 }
+                // TODO: Error if player cannot defeat monster
             }
         }
 
@@ -81,7 +100,7 @@ namespace Bunchkins.Domain.Core.GameStates
             }
 
             Monsters.Remove(monster);
-            
+
             if (Monsters.Count == 0 && isLootable)
             {
                 Game.SetState(new TreasureLootState(Game, PileOfTreasures));
@@ -90,7 +109,7 @@ namespace Bunchkins.Domain.Core.GameStates
             {
                 Game.SetState(new TreasureLootState(Game, 0));
             }
-            
+
         }
 
         public bool CanPlayerWin()
