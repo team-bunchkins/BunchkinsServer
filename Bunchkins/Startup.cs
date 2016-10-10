@@ -3,6 +3,9 @@ using System.Threading.Tasks;
 using Microsoft.Owin;
 using Owin;
 using Microsoft.Owin.Cors;
+using Newtonsoft.Json;
+using Microsoft.AspNet.SignalR;
+using Bunchkins.SignalR;
 
 [assembly: OwinStartup(typeof(Bunchkins.Startup))]
 
@@ -20,6 +23,11 @@ namespace Bunchkins
 
                 map.RunSignalR();
             });
+
+            var settings = new JsonSerializerSettings();
+            settings.ContractResolver = new SignalRContractResolver();
+            var serializer = JsonSerializer.Create(settings);
+            GlobalHost.DependencyResolver.Register(typeof(JsonSerializer), () => serializer);
         }
     }
 }

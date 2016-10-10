@@ -110,7 +110,7 @@ namespace Bunchkins.Hubs
                 game.Players.Add(player);
                 GameManager.Instance.Players.Add(player);
 
-                Clients.Group(game.GameId.ToString()).playerJoined(player, Context.ConnectionId);
+                Clients.Group(game.GameId.ToString()).playerJoined(new { Name = player.Name });
                 Groups.Add(player.ConnectionId, game.GameId.ToString());
                 Clients.Caller.callerJoined(gameId, game.Players.Where(p => p.Name != name).Select(p => new { Name = p.Name }));
             }
