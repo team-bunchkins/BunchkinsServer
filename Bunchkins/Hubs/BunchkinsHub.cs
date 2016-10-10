@@ -127,14 +127,14 @@ namespace Bunchkins.Hubs
         }
 
 
-        public void Pass(Guid gameId, string playerName)
+        public void Proceed(Guid gameId, string playerName)
         {
             var game = GetGame(gameId);
             var player = GetPlayer(playerName);
 
             if (game != null && game.ActivePlayer.ConnectionId == Context.ConnectionId)
             {
-                game.HandleInput(player, Input.PASS);
+                game.HandleInput(player, Input.PROCEED);
 
                 // Notify all clients in group of pass
                 Clients.Group(game.GameId.ToString()).passed(player);

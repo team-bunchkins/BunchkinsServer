@@ -8,8 +8,9 @@ namespace Bunchkins.Domain.Core
 {
     public enum Input
     {
-        PASS,
+        PROCEED,
         FIGHT,
-        RUN
+        RUN,
+        PASS
     }
 }

@@ -1,6 +1,5 @@
 ﻿using Bunchkins.Domain.Cards;
 using Bunchkins.Domain.Cards.Treasure.Equipment;
-using Bunchkins.Extension;
 using Bunchkins.Domain.Core;
 using System;
 using System.Collections.Generic;

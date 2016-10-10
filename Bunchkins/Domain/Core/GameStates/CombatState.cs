@@ -31,7 +31,7 @@ namespace Bunchkins.Domain.Core.GameStates
                 Game.RandomGenerator.Next(1, 7);
                 // Bad stuff
             }
-            else if (input == PASS)
+            else if (input == PROCEED)
             {
                 // TODO: MAYBE it should be a list of passed players instead?
                 PlayersPassed++;

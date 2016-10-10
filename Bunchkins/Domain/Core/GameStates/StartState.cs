@@ -18,7 +18,7 @@ namespace Bunchkins.Domain.Core.GameStates
 
         public override void HandleInput(Player player, Input input)
         {
-            if (input == PASS)
+            if (input == PROCEED)
             {
                 Game.SetState(new DrawState(Game));
             }
