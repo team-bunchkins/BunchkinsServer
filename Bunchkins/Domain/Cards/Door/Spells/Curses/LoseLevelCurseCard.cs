@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 
 namespace Bunchkins.Domain.Cards.Door.Spells.Curses
 {
-    class LoseLevelCurseCard : CurseCard, IAnytimeSpell
+   public class LoseLevelCurseCard : CurseCard, IAnytimeSpell
     {
+        public int Level { get; set; }
         public void Cast(Player player)
         {
-            throw new NotImplementedException();
+           player.DecreaseLevel(Level);
         }
     }
 }
