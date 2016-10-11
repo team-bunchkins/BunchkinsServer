@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Bunchkins.Domain.Core;
 using Bunchkins.Domain.Players;
 using Microsoft.AspNet.SignalR.Hubs;
+using static Bunchkins.Domain.Core.Input;
+using Bunchkins.Domain.Core.GameStates;
 
 namespace Bunchkins.Hubs
 {
@@ -38,21 +40,23 @@ namespace Bunchkins.Hubs
 
         #endregion
 
+        #region Incoming requests
+
         public void CreateGame(string playerName)
         {
             Player player;
-            
+
             if (GameManager.Instance.Players.Any(x => x.Name == playerName))
             {
                 Clients.Caller.displayError("Username already exists.");
                 return;
-            } 
+            }
             else if (GameManager.Instance.Players.Any(x => x.ConnectionId == Context.ConnectionId))
             {
                 Clients.Caller.displayError("User is already in a game.");
                 return;
             }
-            else 
+            else
             {
                 player = new Player
                 {
@@ -77,7 +81,7 @@ namespace Bunchkins.Hubs
             if (GameManager.Instance.Players.Any(x => x.Name == name))
             {
                 Clients.Caller.displayError("Username already exists.");
-                return; 
+                return;
             }
             else if (GameManager.Instance.Players.Any(x => x.ConnectionId == Context.ConnectionId))
             {
@@ -124,6 +128,14 @@ namespace Bunchkins.Hubs
             {
                 game.Start();
             }
+
+            Clients.Group(game.GameId.ToString()).gameStarted();
+
+            // update hands
+            foreach (Player player in game.Players)
+            {
+                Clients.Client(player.ConnectionId).updateHand(player.Hand);
+            }
         }
 
 
@@ -134,7 +146,7 @@ namespace Bunchkins.Hubs
 
             if (game != null && game.ActivePlayer.ConnectionId == Context.ConnectionId)
             {
-                game.HandleInput(player, Input.PROCEED);
+                game.HandleInput(player, PROCEED);
 
                 // Notify all clients in group of pass
                 Clients.Group(game.GameId.ToString()).passed(player);
@@ -149,6 +161,35 @@ namespace Bunchkins.Hubs
             }
         }
 
+        public void Fight(Guid gameId, string playerName)
+        {
+            var game = GetGame(gameId);
+            var player = GetPlayer(playerName);
+
+            if (game != null && game.ActivePlayer.ConnectionId == Context.ConnectionId && game.State is CombatState)
+            {
+                game.HandleInput(player, FIGHT);
+            }
+            else if (game != null)
+            {
+                Clients.Caller.displayError("It is not your turn!");
+            }
+            else
+            {
+                Clients.Caller.displayError("Could not find game.");
+            }
+        }
+
+        #endregion
+
+        #region Outgoing requests
+        
+
+
+        #endregion
+
+        #region Helper functions
+
         private Game GetGame(Guid gameId)
         {
             return GameManager.Instance.Games
@@ -162,5 +203,7 @@ namespace Bunchkins.Hubs
                 .Where(x => x.Name == name)
                 .SingleOrDefault();
         }
+
+        #endregion
     }
 }
