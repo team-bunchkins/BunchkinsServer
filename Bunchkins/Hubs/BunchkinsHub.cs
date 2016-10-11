@@ -9,6 +9,7 @@ using Bunchkins.Domain.Players;
 using Microsoft.AspNet.SignalR.Hubs;
 using static Bunchkins.Domain.Core.Input;
 using Bunchkins.Domain.Core.GameStates;
+using Bunchkins.Domain.Cards;
 
 namespace Bunchkins.Hubs
 {
@@ -138,6 +139,27 @@ namespace Bunchkins.Hubs
             }
         }
 
+        public void PlayCard(Guid gameId, string playerName, string targetName, Card card)
+        {
+            var game = GetGame(gameId);
+            var player = GetPlayer(playerName);
+            var target = GetPlayer(targetName);
+
+            if (game != null && game.Players.Any(p => p.ConnectionId == Context.ConnectionId))
+            {
+                if (!(card is ICombatSpell) || game.State is CombatState) {
+                    game.State.PlayCard(player, target, card);
+                }
+                else
+                {
+                    Clients.Caller.displayError("This card cannot be played right now!");
+                }
+            }
+            else
+            {
+                Clients.Caller.displayError("Could not find game.");
+            }
+        }
 
         public void Proceed(Guid gameId, string playerName)
         {
@@ -149,7 +171,7 @@ namespace Bunchkins.Hubs
                 game.HandleInput(player, PROCEED);
 
                 // Notify all clients in group of pass
-                Clients.Group(game.GameId.ToString()).passed(player);
+                Clients.Group(game.GameId.ToString()).proceeded(player);
             }
             else if (game != null)
             {
@@ -166,7 +188,7 @@ namespace Bunchkins.Hubs
             var game = GetGame(gameId);
             var player = GetPlayer(playerName);
 
-            if (game != null && game.ActivePlayer.ConnectionId == Context.ConnectionId && game.State is CombatState)
+            if (game != null && game.ActivePlayer.ConnectionId == Context.ConnectionId && game.State is DrawState)
             {
                 game.HandleInput(player, FIGHT);
             }
@@ -180,11 +202,62 @@ namespace Bunchkins.Hubs
             }
         }
 
+        public void Run(Guid gameId, string playerName)
+        {
+            var game = GetGame(gameId);
+            var player = GetPlayer(playerName);
+
+            if (game != null && game.ActivePlayer.ConnectionId == Context.ConnectionId && game.State is CombatState)
+            {
+                game.HandleInput(player, RUN);
+            }
+            else if (game != null)
+            {
+                Clients.Caller.displayError("It is not your turn!");
+            }
+            else
+            {
+                Clients.Caller.displayError("Could not find game.");
+            }
+        }
+
+        public void Pass(Guid gameId, string playerName)
+        {
+            var game = GetGame(gameId);
+            var player = GetPlayer(playerName);
+
+            if (game != null && game.Players.Any(p => p.ConnectionId == Context.ConnectionId) && game.State is CombatState)
+            {
+                game.HandleInput(player, PASS);
+            }
+            else if (game != null)
+            {
+                Clients.Caller.displayError("You cannot do that now.");
+            }
+            else
+            {
+                Clients.Caller.displayError("Could not find game.");
+            }
+        }
+
         #endregion
 
         #region Outgoing requests
-        
 
+        protected void UpdateHand(Player player)
+        {
+            Clients.Client(player.ConnectionId).updateHand(player.Hand);
+        }
+
+        protected void UpdateEquips(Player player)
+        {
+            Clients.Client(player.ConnectionId).updateEquips(player.EquippedCards);
+        }
+
+        protected void UpdateState(Game game, Player player)
+        {
+            Clients.Client(player.ConnectionId).updateState(game.State.ToString());
+        }
 
         #endregion
 
