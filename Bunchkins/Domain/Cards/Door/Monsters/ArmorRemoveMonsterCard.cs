@@ -9,11 +9,11 @@ namespace Bunchkins.Domain.Cards.Door.Monsters
 {
     class ArmorRemoveMonsterCard : MonsterCard
     {
-        public List<string> Slots { get; set; }
+        public string Slot { get; set; }
 
         public override void BadStuff(Player player)
         {
-            player.RemoveEquip(Slots);
+            player.RemoveEquip(Slot);
         }
     }
 }

@@ -70,18 +70,21 @@ namespace Bunchkins.Domain.Players
             EquippedCards.Add(equipment);
         }
 
-        public void RemoveEquip(List<string> slots)
+        public void RemoveEquip(string slot)
         {
-            foreach(var slot in slots)
-            {
-                EquippedCards.RemoveAll(e => e.Slot == slot);
-            }
+                EquippedCards.RemoveAll(e => e.Slot == slot); 
+        }
+
+        public void RemoveAllEquips()
+        {
+                EquippedCards.Clear();
         }
 
         public void RemoveHandCards(int numCards)
         {
             var rand = new Random();
 
+            //TODO : While loop to check hand count is bigger than removal
             for (int i = 0; i < numCards; i++)
             {
                 var index = (int)(rand.NextDouble() * Hand.Count());

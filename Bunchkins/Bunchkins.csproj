@@ -141,6 +141,7 @@
     <Compile Include="Domain\Cards\Door\Spells\AddMonsterSpellCard.cs" />
     <Compile Include="Domain\Cards\Door\Spells\BuffMonsterSpellDoorCard.cs" />
     <Compile Include="Domain\Cards\Door\Spells\Curses\CurseCard.cs" />
+    <Compile Include="Domain\Cards\Door\Spells\Curses\LoseAllEquipCurseCard.cs" />
     <Compile Include="Domain\Cards\Door\Spells\Curses\LoseEquipCurseCard.cs" />
     <Compile Include="Domain\Cards\Door\Spells\Curses\LoseHandCardsCurseCard.cs" />
     <Compile Include="Domain\Cards\Door\Spells\Curses\LoseLevelCurseCard.cs" />
@@ -150,7 +151,7 @@
     <Compile Include="Domain\Cards\Treasure\Equipment\EquipmentCard.cs" />
     <Compile Include="Domain\Cards\Treasure\Spells\BuffMonsterSpellTreasureCard.cs" />
     <Compile Include="Domain\Cards\Treasure\Spells\BuffPlayerSpellCard.cs" />
-    <Compile Include="Domain\Cards\Treasure\Spells\EscapeSpellCard.cs" />
+    <Compile Include="Domain\Cards\Treasure\Spells\EscapeAllSpellCard.cs" />
     <Compile Include="Domain\Cards\Treasure\Spells\LevelUpSpellCard.cs" />
     <Compile Include="Domain\Cards\Treasure\Spells\RemoveCurseSpellCard.cs" />
     <Compile Include="Domain\Cards\Treasure\Spells\TreasureSpellCard.cs" />
@@ -176,6 +177,14 @@
     <Compile Include="Migrations\201610032335496_InitialCreate.Designer.cs">
       <DependentUpon>201610032335496_InitialCreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201610111818469_UpdateModels.cs" />
+    <Compile Include="Migrations\201610111818469_UpdateModels.Designer.cs">
+      <DependentUpon>201610111818469_UpdateModels.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201610120202106_UpdateCardDatabase.cs" />
+    <Compile Include="Migrations\201610120202106_UpdateCardDatabase.Designer.cs">
+      <DependentUpon>201610120202106_UpdateCardDatabase.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SignalR\SignalRContractResolver.cs" />
@@ -184,6 +193,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201610032335496_InitialCreate.resx">
       <DependentUpon>201610032335496_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610111818469_UpdateModels.resx">
+      <DependentUpon>201610111818469_UpdateModels.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610120202106_UpdateCardDatabase.resx">
+      <DependentUpon>201610120202106_UpdateCardDatabase.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
@@ -198,7 +213,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>59887</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
