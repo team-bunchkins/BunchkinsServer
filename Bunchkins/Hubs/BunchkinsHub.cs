@@ -244,19 +244,22 @@ namespace Bunchkins.Hubs
 
         #region Outgoing requests
 
-        protected void UpdateHand(Player player)
+        internal static void UpdateHand(Player player)
         {
-            Clients.Client(player.ConnectionId).updateHand(player.Hand);
+            var hubContext = GlobalHost.ConnectionManager.GetHubContext<BunchkinsHub>();
+            hubContext.Clients.Client(player.ConnectionId).updateHand(player.Hand);
         }
 
-        protected void UpdateEquips(Player player)
+        internal static void UpdateEquips(Player player)
         {
-            Clients.Client(player.ConnectionId).updateEquips(player.EquippedCards);
+            var hubContext = GlobalHost.ConnectionManager.GetHubContext<BunchkinsHub>();
+            hubContext.Clients.Client(player.ConnectionId).updateEquips(player.EquippedCards);
         }
 
-        protected void UpdateState(Game game, Player player)
+        internal static void UpdateState(Game game)
         {
-            Clients.Client(player.ConnectionId).updateState(game.State.ToString());
+            var hubContext = GlobalHost.ConnectionManager.GetHubContext<BunchkinsHub>();
+            hubContext.Clients.Group(game.GameId.ToString()).stateChanged(game.State.ToString());
         }
 
         #endregion
