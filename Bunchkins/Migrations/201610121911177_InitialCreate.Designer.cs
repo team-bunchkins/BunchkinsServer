@@ -7,13 +7,13 @@ namespace Bunchkins.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class UpdateCardDatabase : IMigrationMetadata
+    public sealed partial class InitialCreate : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(UpdateCardDatabase));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(InitialCreate));
         
         string IMigrationMetadata.Id
         {
-            get { return "201610120202106_UpdateCardDatabase"; }
+            get { return "201610121911177_InitialCreate"; }
         }
         
         string IMigrationMetadata.Source

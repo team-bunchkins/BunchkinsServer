@@ -173,17 +173,9 @@
     <Compile Include="Extension\DbSetExtensions.cs" />
     <Compile Include="Hubs\BunchkinsHub.cs" />
     <Compile Include="Infrastructure\BunchkinsDataContext.cs" />
-    <Compile Include="Migrations\201610032335496_InitialCreate.cs" />
-    <Compile Include="Migrations\201610032335496_InitialCreate.Designer.cs">
-      <DependentUpon>201610032335496_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201610111818469_UpdateModels.cs" />
-    <Compile Include="Migrations\201610111818469_UpdateModels.Designer.cs">
-      <DependentUpon>201610111818469_UpdateModels.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201610120202106_UpdateCardDatabase.cs" />
-    <Compile Include="Migrations\201610120202106_UpdateCardDatabase.Designer.cs">
-      <DependentUpon>201610120202106_UpdateCardDatabase.cs</DependentUpon>
+    <Compile Include="Migrations\201610121911177_InitialCreate.cs" />
+    <Compile Include="Migrations\201610121911177_InitialCreate.Designer.cs">
+      <DependentUpon>201610121911177_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -191,17 +183,10 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201610032335496_InitialCreate.resx">
-      <DependentUpon>201610032335496_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201610111818469_UpdateModels.resx">
-      <DependentUpon>201610111818469_UpdateModels.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201610120202106_UpdateCardDatabase.resx">
-      <DependentUpon>201610120202106_UpdateCardDatabase.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201610121911177_InitialCreate.resx">
+      <DependentUpon>201610121911177_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

@@ -21,14 +21,14 @@ namespace Bunchkins.Migrations
         {
             if(context.Cards.Count() == 0)
             {
-
+                
                 context.Cards.Add(new BuffMonsterSpellDoorCard { Description = "Play During Combat. +5 to Monster Level.", Name = "Enraged Monster", CombatPower = 5, Type = "Spell" });
                 context.Cards.Add(new BuffMonsterSpellDoorCard { Description = "Play During Combat. +5 to Monster Level,", Name = "Intelligent Monster", CombatPower = 5, Type = "Spell" });
                 context.Cards.Add(new BuffMonsterSpellDoorCard { Description = "Play During Combat. +10 to Monster Level", Name = "Humongous Monster", CombatPower = 5, Type = "Spell" });
                 context.Cards.Add(new BuffMonsterSpellDoorCard { Description = "Play During Combat. +10 to Monster Level", Name = "Ancient Monster", CombatPower = 5, Type = "Spell" });
                 context.Cards.Add(new BuffMonsterSpellDoorCard { Description = "Play During Combat. -5 to Monster Level", Name = "Baby Monster", CombatPower = -5, Type = "Spell" });
-
-                context.Cards.Add(new AddMonsterSpellCard { Description = "This room looks fun. OH GOD WHATS THAT?!", Name = "Wandering Monster", Type = "Spell" });
+                
+                context.Cards.Add(new AddMonsterSpellCard { Description = "This room looks fun. OH GOD WHAT'S THAT?!", Name = "Wandering Monster", Type = "Spell" });
 
                 context.Cards.Add(new ArmorRemoveMonsterCard { Description = "The biggest and most hairy of feet.", Name = "Bigfoot", Level = 12, TreasureGain = 3, LevelGain = 1, Slot = "Headgear", Type = "Monster" });
                 context.Cards.Add(new ArmorRemoveMonsterCard { Description = "I wont ask how you got them. But you do have them.", Name = "Crabs", Level = 1, TreasureGain = 1, LevelGain = 1, Slot = "Footgear", Type = "Monster" });
@@ -126,8 +126,9 @@ namespace Bunchkins.Migrations
                 context.Cards.Add(new EquipmentCard { Description = "Read the name.", Slot = "Headgear", Gold = 400, Bonus = 3, Name = "Bad-Ass Bandanna", Type = "Equipment" });
                 context.Cards.Add(new EquipmentCard { Description = "You'll like the way you look. I guarantee it.", Slot = "Armor", Gold = 400, Bonus = 3, Name = "Short Wide Armor", Type = "Equipment" });
                 context.Cards.Add(new EquipmentCard { Description = "Well.....it's pretty.", Slot = "2Hands", Gold = 800, Bonus = 4, Name = "Bow With Ribbons", Type = "Equipment" });
-
+                
                 context.SaveChanges();
+                
             }
         }
     }
