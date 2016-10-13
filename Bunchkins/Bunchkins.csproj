@@ -177,6 +177,10 @@
     <Compile Include="Migrations\201610121911177_InitialCreate.Designer.cs">
       <DependentUpon>201610121911177_InitialCreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201610131910099_FlavorTextAdded.cs" />
+    <Compile Include="Migrations\201610131910099_FlavorTextAdded.Designer.cs">
+      <DependentUpon>201610131910099_FlavorTextAdded.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SignalR\SignalRContractResolver.cs" />
@@ -185,6 +189,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201610121911177_InitialCreate.resx">
       <DependentUpon>201610121911177_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610131910099_FlavorTextAdded.resx">
+      <DependentUpon>201610131910099_FlavorTextAdded.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
