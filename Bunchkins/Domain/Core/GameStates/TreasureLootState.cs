@@ -12,7 +12,7 @@ namespace Bunchkins.Domain.Core.GameStates
         {
             for (int i = 0; i < numTreasures; i++)
             {
-                Game.ActivePlayer.Hand.Add(Game.DrawTreasureCard());
+                Game.ActivePlayer.AddHandCard(Game.DrawTreasureCard());
             }
 
             Game.SetState(new EndState(Game));

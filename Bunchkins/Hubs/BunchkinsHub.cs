@@ -261,7 +261,13 @@ namespace Bunchkins.Hubs
         internal static void UpdateState(Game game)
         {
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<BunchkinsHub>();
-            hubContext.Clients.Group(game.GameId.ToString()).stateChanged(game.State.ToString());
+            hubContext.Clients.Group(game.GameId.ToString()).stateChanged(game.State.GetType().Name);
+        }
+
+        internal static void UpdateActivePlayer(Game game)
+        {
+            var hubContext = GlobalHost.ConnectionManager.GetHubContext<BunchkinsHub>();
+            hubContext.Clients.Group(game.GameId.ToString()).activePlayerChanged(game.ActivePlayer.Name);
         }
 
         internal static void UpdateLevel(Game game, Player player)

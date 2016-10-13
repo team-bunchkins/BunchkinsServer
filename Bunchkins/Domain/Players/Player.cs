@@ -1,6 +1,7 @@
 ﻿using Bunchkins.Domain.Cards;
 using Bunchkins.Domain.Cards.Treasure.Equipment;
 using Bunchkins.Domain.Core;
+using Bunchkins.Hubs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -78,6 +79,12 @@ namespace Bunchkins.Domain.Players
         public void RemoveAllEquips()
         {
                 EquippedCards.Clear();
+        }
+
+        public void AddHandCard(Card card)
+        {
+            Hand.Add(card);
+            // BunchkinsHub.UpdateHand(this);
         }
 
         public void RemoveHandCards(int numCards)

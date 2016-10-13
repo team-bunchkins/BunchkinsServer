@@ -29,7 +29,7 @@ namespace Bunchkins.Domain.Core.GameStates
             else
             {
                 //ADD TO HAND
-                game.ActivePlayer.Hand.Add(card);
+                game.ActivePlayer.AddHandCard(card);
 
                 //COMBAT DAT MONSTER???
             }
