@@ -10,7 +10,7 @@ namespace Bunchkins.Domain.Cards.Door.Spells.Curses
    public class LoseLevelCurseCard : CurseCard, IAnytimeSpell
     {
         public int Levels { get; set; }
-        public void Cast(Player player)
+        public override void Cast(Player player)
         {
            player.DecreaseLevel(Levels);
         }

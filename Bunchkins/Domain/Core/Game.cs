@@ -43,8 +43,8 @@ namespace Bunchkins.Domain.Core
             // Draw hands for players
             foreach (Player player in Players)
             {
-                player.Hand.Add(DrawDoorCard());
-                player.Hand.Add(DrawDoorCard());
+                player.Hand.Add(DrawDoorCardForHand());
+                player.Hand.Add(DrawDoorCardForHand());
                 player.Hand.Add(DrawTreasureCard());
                 player.Hand.Add(DrawTreasureCard());
             }
@@ -98,7 +98,7 @@ namespace Bunchkins.Domain.Core
                     isInHand = false;
 
                     // check whether card already exists in players' hand/equips
-                    if (Players.Exists(p => p.Hand.Contains(card)))
+                    if (Players.Any(p => p.Hand.Any(c => c.CardId == card.CardId)))
                     {
                         isInHand = true;
                     }
@@ -121,7 +121,7 @@ namespace Bunchkins.Domain.Core
                     isInHand = false;
 
                     // check whether card already exists in players' hand/equips
-                    if (Players.Exists(p => p.Hand.Contains(card)) || Players.Exists(p => p.EquippedCards.Contains(card)))
+                    if (Players.Any(p => p.Hand.Any(c => c.CardId == card.CardId)) || Players.Any(p => p.EquippedCards.Any(c => c.CardId == card.CardId)))
                     {
                         isInHand = true;
                     }
