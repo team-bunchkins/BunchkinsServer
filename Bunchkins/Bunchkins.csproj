@@ -181,6 +181,10 @@
     <Compile Include="Migrations\201610131910099_FlavorTextAdded.Designer.cs">
       <DependentUpon>201610131910099_FlavorTextAdded.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201610132133583_BonusTreasureAddedToSpells.cs" />
+    <Compile Include="Migrations\201610132133583_BonusTreasureAddedToSpells.Designer.cs">
+      <DependentUpon>201610132133583_BonusTreasureAddedToSpells.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SignalR\SignalRContractResolver.cs" />
@@ -192,6 +196,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201610131910099_FlavorTextAdded.resx">
       <DependentUpon>201610131910099_FlavorTextAdded.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610132133583_BonusTreasureAddedToSpells.resx">
+      <DependentUpon>201610132133583_BonusTreasureAddedToSpells.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Bunchkins.Domain.Cards;
 using Bunchkins.Domain.Players;
 using Bunchkins.Domain.Cards.Door.Monsters;
+using Bunchkins.Domain.Cards.Door.Spells;
 using static Bunchkins.Domain.Core.Input;
 
 namespace Bunchkins.Domain.Core.GameStates
@@ -91,7 +92,10 @@ namespace Bunchkins.Domain.Core.GameStates
             MonsterCard monster = Game.DrawMonsterCard();
             Monsters.Add(monster);
         }
-
+        public void AddMonsterTreasureBonus(int bonus)
+        {
+            PileOfTreasures += bonus;
+        }
         public void RemoveMonster(MonsterCard monster, bool isLootable)
         {
             if (isLootable)

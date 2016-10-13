@@ -22,11 +22,11 @@ namespace Bunchkins.Migrations
             if(context.Cards.Count() == 0)
             {
                 
-                context.Cards.Add(new BuffMonsterSpellDoorCard { Description = "Play During Combat. +5 to Monster Level.", FlavorText = "You'll like him when he's angry. If you aren't the one fighting.", Name = "Enraged Monster", CombatPower = 5, Type = "CombatSpell" });
-                context.Cards.Add(new BuffMonsterSpellDoorCard { Description = "Play During Combat. +5 to Monster Level.", FlavorText = "The square root of pie is, IT'S EATING ME!!!!", Name = "Intelligent Monster", CombatPower = 5, Type = "CombatSpell" });
-                context.Cards.Add(new BuffMonsterSpellDoorCard { Description = "Play During Combat. +10 to Monster Level.", FlavorText = "Her fingers will blot out the sun.", Name = "Humongous Monster", CombatPower = 5, Type = "CombatSpell" });
-                context.Cards.Add(new BuffMonsterSpellDoorCard { Description = "Play During Combat. +10 to Monster Level.", FlavorText = "The oldest of schools.", Name = "Ancient Monster", CombatPower = 5, Type = "CombatSpell" });
-                context.Cards.Add(new BuffMonsterSpellDoorCard { Description = "Play During Combat. -5 to Monster Level.", FlavorText = "TOO.....CUTE....Gonna....DIE.", Name = "Baby Monster", CombatPower = -5, Type = "CombatSpell" });
+                context.Cards.Add(new BuffMonsterSpellDoorCard { Description = "Play During Combat. +5 to Monster Level.", FlavorText = "You'll like him when he's angry. If you aren't the one fighting.", Name = "Enraged Monster", CombatPower = 5, TreasureChange = 1, Type = "CombatSpell" });
+                context.Cards.Add(new BuffMonsterSpellDoorCard { Description = "Play During Combat. +5 to Monster Level.", FlavorText = "The square root of pie is, IT'S EATING ME!!!!", Name = "Intelligent Monster", CombatPower = 5, TreasureChange = 1, Type = "CombatSpell" });
+                context.Cards.Add(new BuffMonsterSpellDoorCard { Description = "Play During Combat. +10 to Monster Level.", FlavorText = "Her fingers will blot out the sun.", Name = "Humongous Monster", CombatPower = 5, TreasureChange = 2, Type = "CombatSpell" });
+                context.Cards.Add(new BuffMonsterSpellDoorCard { Description = "Play During Combat. +10 to Monster Level.", FlavorText = "The oldest of schools.", Name = "Ancient Monster", CombatPower = 5, TreasureChange = 2, Type = "CombatSpell" });
+                context.Cards.Add(new BuffMonsterSpellDoorCard { Description = "Play During Combat. -5 to Monster Level.", FlavorText = "TOO.....CUTE....Gonna....DIE.", Name = "Baby Monster", CombatPower = -5, TreasureChange = -1, Type = "CombatSpell" });
                 
                 context.Cards.Add(new AddMonsterSpellCard { Description = "Add a random monster to this Combat Phase.", FlavorText = "This room looks fun. OH GOD WHAT'S THAT?!", Name = "Wandering Monster", Type = "CombatSpell" });
 
