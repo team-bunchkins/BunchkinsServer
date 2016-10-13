@@ -244,22 +244,30 @@ namespace Bunchkins.Hubs
 
         #region Outgoing requests
 
-        internal static void UpdateHand(Player player)
+        internal static void UpdateHand(Game game, Player player)
         {
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<BunchkinsHub>();
             hubContext.Clients.Client(player.ConnectionId).updateHand(player.Hand);
+            // TODO: Test, not sure this works to exclude the updated user
+            hubContext.Clients.Group(game.GameId.ToString()).AllExcept(player.ConnectionId).updateOpponentHand(player.Name, player.Hand.Count());
         }
 
-        internal static void UpdateEquips(Player player)
+        internal static void UpdateEquips(Game game, Player player)
         {
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<BunchkinsHub>();
-            hubContext.Clients.Client(player.ConnectionId).updateEquips(player.EquippedCards);
+            hubContext.Clients.Client(player.ConnectionId).updateEquips(player.Name, player.EquippedCards);
         }
 
         internal static void UpdateState(Game game)
         {
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<BunchkinsHub>();
             hubContext.Clients.Group(game.GameId.ToString()).stateChanged(game.State.ToString());
+        }
+
+        internal static void UpdateLevel(Game game, Player player)
+        {
+            var hubContext = GlobalHost.ConnectionManager.GetHubContext<BunchkinsHub>();
+            hubContext.Clients.Group(game.GameId.ToString()).updateLevel(player.Name, player.Level);
         }
 
         #endregion
