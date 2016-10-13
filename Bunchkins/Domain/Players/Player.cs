@@ -79,8 +79,19 @@ namespace Bunchkins.Domain.Players
         {
                 EquippedCards.Clear();
         }
-
-        public void RemoveHandCards(int numCards)
+        public void Discard(Card card)
+        {
+            if (Hand.Contains(card))
+            {
+                Hand.Remove(card);
+            }
+            else if (EquippedCards.Contains(card))
+            {
+                EquippedCards.Remove((EquipmentCard) card);
+            }
+           
+        }
+        public void RemoveRandomHandCards(int numCards)
         {
             var rand = new Random();
 

@@ -161,6 +161,21 @@ namespace Bunchkins.Hubs
             }
         }
 
+        public void Discard(Guid gameId, string playerName, Card card)
+        {
+            var game = GetGame(gameId);
+            var player = GetPlayer(playerName);
+
+            if (game != null && game.Players.Any(p => p.ConnectionId == Context.ConnectionId))
+            {
+                player.Discard(card);
+            }
+            else
+            {
+                Clients.Caller.displayError("Could not find game.");
+            }
+        }
+
         public void Proceed(Guid gameId, string playerName)
         {
             var game = GetGame(gameId);

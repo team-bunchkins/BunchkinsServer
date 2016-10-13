@@ -12,7 +12,7 @@ namespace Bunchkins.Domain.Cards.Door.Spells.Curses
         public int NumCards { get; set; }
         public override void Cast(Player player)
         {
-            player.RemoveHandCards(NumCards);
+            player.RemoveRandomHandCards(NumCards);
         }
     }
 }
