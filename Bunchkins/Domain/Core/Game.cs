@@ -3,7 +3,9 @@ using Bunchkins.Domain.Cards.Door;
 using Bunchkins.Domain.Cards.Door.Monsters;
 using Bunchkins.Domain.Core.GameStates;
 using Bunchkins.Domain.Players;
+using Bunchkins.Hubs;
 using Bunchkins.Infrastructure;
+using Microsoft.AspNet.SignalR;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -49,7 +51,12 @@ namespace Bunchkins.Domain.Core
                 player.Hand.Add(DrawTreasureCard());
             }
 
-            State = new StartState(this);
+            SetState(new StartState(this));
+            
+            foreach(Player player in Players)
+            {
+                BunchkinsHub.UpdatePlayer(this, player);
+            }
         }
 
         public void NextPlayer()
@@ -57,6 +64,9 @@ namespace Bunchkins.Domain.Core
             ActivePlayer.IsActive = false;
             mPlayerIterator.MoveNext();
             mPlayerIterator.Current.IsActive = true;
+
+            // Update frontend
+            BunchkinsHub.UpdateActivePlayer(this);
         }
 
         IEnumerable<Player> CreatePlayerIterator()
@@ -83,6 +93,8 @@ namespace Bunchkins.Domain.Core
         public void SetState(GameState state)
         {
             State = state;
+            // send update to clients
+            BunchkinsHub.UpdateState(this);
         }
 
         public DoorCard DrawDoorCard()

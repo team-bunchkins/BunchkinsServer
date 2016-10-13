@@ -1,6 +1,7 @@
 ﻿using Bunchkins.Domain.Cards;
 using Bunchkins.Domain.Cards.Treasure.Equipment;
 using Bunchkins.Domain.Core;
+using Bunchkins.Hubs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,9 +20,9 @@ namespace Bunchkins.Domain.Players
 
         public int Level { get; private set; }
 
-        public List<Card> Hand { get; set; }
+        public List<Card> Hand { get; private set; }
 
-        public List<EquipmentCard> EquippedCards { get; set; }
+        public List<EquipmentCard> EquippedCards { get; private set; }
 
         public bool IsActive { get; set; }
 
@@ -37,6 +38,7 @@ namespace Bunchkins.Domain.Players
         {
             Hand = new List<Card>();
             EquippedCards = new List<EquipmentCard>();
+            Level = 1;
         }
 
         public void Die()
@@ -45,6 +47,7 @@ namespace Bunchkins.Domain.Players
 
             // TODO: Do not remove race/class cards
             EquippedCards.Clear();
+            BunchkinsHub.UpdatePlayer(this);
         }
 
         public void DecreaseLevel(int levels)
@@ -57,28 +60,40 @@ namespace Bunchkins.Domain.Players
             {
                 Level = Level - levels;
             }
+            BunchkinsHub.UpdateLevel(this);
         }
 
         public void IncreaseLevel(int levels)
         {
-            Level += levels; 
+            Level += levels;
+            BunchkinsHub.UpdateLevel(this);
         }
 
         public void EquipItem(EquipmentCard equipment)
         {
             EquippedCards.RemoveAll(e => e.Slot == equipment.Slot);
             EquippedCards.Add(equipment);
+            BunchkinsHub.UpdatePlayer(this);
         }
 
         public void RemoveEquip(string slot)
         {
-                EquippedCards.RemoveAll(e => e.Slot == slot); 
+            EquippedCards.RemoveAll(e => e.Slot == slot);
+            BunchkinsHub.UpdatePlayer(this);
         }
 
         public void RemoveAllEquips()
         {
-                EquippedCards.Clear();
+            EquippedCards.Clear();
+            BunchkinsHub.UpdatePlayer(this);
         }
+
+        public void AddHandCard(Card card)
+        {
+            Hand.Add(card);
+            BunchkinsHub.UpdateHand(this);
+        }
+
         public void Discard(Card card)
         {
             if (Hand.Contains(card))
@@ -89,8 +104,9 @@ namespace Bunchkins.Domain.Players
             {
                 EquippedCards.Remove((EquipmentCard) card);
             }
-           
+            BunchkinsHub.UpdatePlayer(this);   
         }
+
         public void RemoveRandomHandCards(int numCards)
         {
             var rand = new Random();
@@ -102,7 +118,8 @@ namespace Bunchkins.Domain.Players
                 Hand.RemoveAt(index);
                 // Hand.GetRandomElement(c => c.CardId);
             }
-            
+
+            BunchkinsHub.UpdatePlayer(this);
         }
 
     }

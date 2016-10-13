@@ -8,6 +8,7 @@ using Bunchkins.Domain.Players;
 using Bunchkins.Domain.Cards.Door.Monsters;
 using Bunchkins.Domain.Cards.Door.Spells;
 using static Bunchkins.Domain.Core.Input;
+using Bunchkins.Hubs;
 
 namespace Bunchkins.Domain.Core.GameStates
 {
@@ -25,6 +26,7 @@ namespace Bunchkins.Domain.Core.GameStates
             Monsters.Add(monster);
 
             PlayersPassed = new List<Player>();
+            BunchkinsHub.UpdateCombatState(Game, this);
         }
 
         public override void HandleInput(Player player, Input input)
@@ -46,17 +48,21 @@ namespace Bunchkins.Domain.Core.GameStates
                     }
                 }
 
+                BunchkinsHub.EndCombatState(Game);
                 Game.SetState(new EndState(Game));
             }
             else if (input == PASS && !PlayersPassed.Any(p => p.Name == player.Name))
             {
                 PlayersPassed.Add(player);
+                BunchkinsHub.UpdateCombatState(Game, this);
             }
             else if (input == PROCEED && PlayersPassed.Count() == Game.Players.Count() - 1)
             {
                 if (Game.ActivePlayer.CombatPower + PlayerCombatBonus > Monsters.Sum(m => m.Level) + MonsterCombatBonus)
                 {
                     int treasures = Monsters.Sum(m => m.TreasureGain);
+
+                    BunchkinsHub.EndCombatState(Game);
                     Game.SetState(new TreasureLootState(Game, treasures));
                 }
                 // TODO: Error if player cannot defeat monster
@@ -80,17 +86,21 @@ namespace Bunchkins.Domain.Core.GameStates
         public void AddMonsterCombatBonus(int bonus)
         {
             MonsterCombatBonus += bonus;
+            BunchkinsHub.UpdateCombatState(Game, this);
         }
 
         public void AddPlayerCombatBonus(int bonus)
         {
             PlayerCombatBonus += bonus;
+            BunchkinsHub.UpdateCombatState(Game, this);
         }
 
         public void AddMonster()
         {
             MonsterCard monster = Game.DrawMonsterCard();
             Monsters.Add(monster);
+
+            BunchkinsHub.UpdateCombatState(Game, this);
         }
         public void AddMonsterTreasureBonus(int bonus)
         {
@@ -114,6 +124,7 @@ namespace Bunchkins.Domain.Core.GameStates
                 Game.SetState(new TreasureLootState(Game, 0));
             }
 
+            BunchkinsHub.UpdateCombatState(Game, this);
         }
 
         public bool CanPlayerWin()
