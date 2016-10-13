@@ -10,6 +10,7 @@ using Microsoft.AspNet.SignalR.Hubs;
 using static Bunchkins.Domain.Core.Input;
 using Bunchkins.Domain.Core.GameStates;
 using Bunchkins.Domain.Cards;
+using Bunchkins.Domain.Cards.Treasure.Equipment;
 
 namespace Bunchkins.Hubs
 {
@@ -147,7 +148,7 @@ namespace Bunchkins.Hubs
 
             if (game != null && game.Players.Any(p => p.ConnectionId == Context.ConnectionId))
             {
-                if (!(card is ICombatSpell) || game.State is CombatState) {
+                if ((game.State is CombatState && !(card is EquipmentCard)) || (!(game.State is CombatState) && !(card is ICombatSpell))) {
                     game.State.PlayCard(player, target, card);
                 }
                 else
@@ -244,18 +245,37 @@ namespace Bunchkins.Hubs
 
         #region Outgoing requests
 
+        internal static void UpdatePlayer(Game game, Player player)
+        {
+            var hubContext = GlobalHost.ConnectionManager.GetHubContext<BunchkinsHub>();
+            hubContext.Clients.Client(player.ConnectionId).updatePlayer(
+                new
+                {
+                    Name = player.Name,
+                    Level = player.Level,
+                    CombatPower = player.CombatPower,
+                    Hand = player.Hand,
+                    EquippedCards = player.EquippedCards
+                });
+
+            // TODO: Test, not sure this works to exclude the updated user
+            hubContext.Clients.Group(game.GameId.ToString()).AllExcept(player.ConnectionId).updateOpponent(
+                new
+                {
+                    Name = player.Name,
+                    Level = player.Level,
+                    CombatPower = player.CombatPower,
+                    HandSize = player.Hand.Count(),
+                    EquippedCards = player.EquippedCards
+                });
+        }
+
         internal static void UpdateHand(Game game, Player player)
         {
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<BunchkinsHub>();
             hubContext.Clients.Client(player.ConnectionId).updateHand(player.Hand);
             // TODO: Test, not sure this works to exclude the updated user
             hubContext.Clients.Group(game.GameId.ToString()).AllExcept(player.ConnectionId).updateOpponentHand(player.Name, player.Hand.Count());
-        }
-
-        internal static void UpdateEquips(Game game, Player player)
-        {
-            var hubContext = GlobalHost.ConnectionManager.GetHubContext<BunchkinsHub>();
-            hubContext.Clients.Client(player.ConnectionId).updateEquips(player.Name, player.EquippedCards);
         }
 
         internal static void UpdateState(Game game)
@@ -275,6 +295,31 @@ namespace Bunchkins.Hubs
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<BunchkinsHub>();
             hubContext.Clients.Group(game.GameId.ToString()).updateLevel(player.Name, player.Level);
         }
+
+        internal static void UpdateCombatState(Game game, CombatState combat)
+        {
+            var hubContext = GlobalHost.ConnectionManager.GetHubContext<BunchkinsHub>();
+            hubContext.Clients.Group(game.GameId.ToString()).updateCombatPhase(
+                new {
+                    Monsters = combat.Monsters,
+                    MonsterCombatPower = combat.Monsters.Sum(m => m.Level),
+                    PlayerCombatBonus = combat.PlayerCombatBonus,
+                    MonsterCombatBonus = combat.MonsterCombatBonus,
+                    PlayersPassed = combat.PlayersPassed.Select(p => p.Name)
+                });
+        }
+
+        internal static void EndCombatState(Game game)
+        {
+            var hubContext = GlobalHost.ConnectionManager.GetHubContext<BunchkinsHub>();
+            hubContext.Clients.Group(game.GameId.ToString()).endCombatPhase();
+        }
+
+        //internal static void UpdatePassedPlayers(Game game, List<Player> players)
+        //{
+        //    var hubContext = GlobalHost.ConnectionManager.GetHubContext<BunchkinsHub>();
+        //    hubContext.Clients.Group(game.GameId.ToString()).updatePassedPlayers(players.Select(p => p.Name));
+        //}
 
         #endregion
 

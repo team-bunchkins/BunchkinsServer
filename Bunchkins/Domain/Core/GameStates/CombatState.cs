@@ -7,6 +7,7 @@ using Bunchkins.Domain.Cards;
 using Bunchkins.Domain.Players;
 using Bunchkins.Domain.Cards.Door.Monsters;
 using static Bunchkins.Domain.Core.Input;
+using Bunchkins.Hubs;
 
 namespace Bunchkins.Domain.Core.GameStates
 {
@@ -24,6 +25,7 @@ namespace Bunchkins.Domain.Core.GameStates
             Monsters.Add(monster);
 
             PlayersPassed = new List<Player>();
+            BunchkinsHub.UpdateCombatState(Game, this);
         }
 
         public override void HandleInput(Player player, Input input)
@@ -45,17 +47,21 @@ namespace Bunchkins.Domain.Core.GameStates
                     }
                 }
 
+                BunchkinsHub.EndCombatState(Game);
                 Game.SetState(new EndState(Game));
             }
             else if (input == PASS && !PlayersPassed.Any(p => p.Name == player.Name))
             {
                 PlayersPassed.Add(player);
+                BunchkinsHub.UpdateCombatState(Game, this);
             }
             else if (input == PROCEED && PlayersPassed.Count() == Game.Players.Count() - 1)
             {
                 if (Game.ActivePlayer.CombatPower + PlayerCombatBonus > Monsters.Sum(m => m.Level) + MonsterCombatBonus)
                 {
                     int treasures = Monsters.Sum(m => m.TreasureGain);
+
+                    BunchkinsHub.EndCombatState(Game);
                     Game.SetState(new TreasureLootState(Game, treasures));
                 }
                 // TODO: Error if player cannot defeat monster
