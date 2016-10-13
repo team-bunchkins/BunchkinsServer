@@ -9,7 +9,7 @@ namespace Bunchkins.Domain.Cards.Door.Spells.Curses
     public class LoseAllEquipCurseCard : CurseCard, IAnytimeSpell
     {
 
-        public void Cast(Player player)
+        public override void Cast(Player player)
         {
             player.RemoveAllEquips();
         }

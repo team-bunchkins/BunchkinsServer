@@ -23,15 +23,12 @@ namespace Bunchkins.Domain.Core.GameStates
             }
             else if (card is CurseCard)
             {
-                //CURSE DAT PLAYA, PLAYA
-                //COMBAT DAT MONSTER???
+                ((CurseCard)card).Cast(game.ActivePlayer);
             }
             else
             {
                 //ADD TO HAND
                 game.ActivePlayer.AddHandCard(card);
-
-                //COMBAT DAT MONSTER???
             }
         }
 
