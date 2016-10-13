@@ -52,6 +52,11 @@ namespace Bunchkins.Domain.Core
             }
 
             SetState(new StartState(this));
+            
+            foreach(Player player in Players)
+            {
+                BunchkinsHub.UpdatePlayer(this, player);
+            }
         }
 
         public void NextPlayer()

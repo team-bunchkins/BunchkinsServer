@@ -85,17 +85,21 @@ namespace Bunchkins.Domain.Core.GameStates
         public void AddMonsterCombatBonus(int bonus)
         {
             MonsterCombatBonus += bonus;
+            BunchkinsHub.UpdateCombatState(Game, this);
         }
 
         public void AddPlayerCombatBonus(int bonus)
         {
             PlayerCombatBonus += bonus;
+            BunchkinsHub.UpdateCombatState(Game, this);
         }
 
         public void AddMonster()
         {
             MonsterCard monster = Game.DrawMonsterCard();
             Monsters.Add(monster);
+
+            BunchkinsHub.UpdateCombatState(Game, this);
         }
 
         public void RemoveMonster(MonsterCard monster, bool isLootable)
@@ -116,6 +120,7 @@ namespace Bunchkins.Domain.Core.GameStates
                 Game.SetState(new TreasureLootState(Game, 0));
             }
 
+            BunchkinsHub.UpdateCombatState(Game, this);
         }
 
         public bool CanPlayerWin()

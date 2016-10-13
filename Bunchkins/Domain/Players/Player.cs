@@ -38,6 +38,7 @@ namespace Bunchkins.Domain.Players
         {
             Hand = new List<Card>();
             EquippedCards = new List<EquipmentCard>();
+            Level = 1;
         }
 
         public void Die()
@@ -46,6 +47,7 @@ namespace Bunchkins.Domain.Players
 
             // TODO: Do not remove race/class cards
             EquippedCards.Clear();
+            BunchkinsHub.UpdatePlayer(this);
         }
 
         public void DecreaseLevel(int levels)
@@ -58,33 +60,38 @@ namespace Bunchkins.Domain.Players
             {
                 Level = Level - levels;
             }
+            BunchkinsHub.UpdateLevel(this);
         }
 
         public void IncreaseLevel(int levels)
         {
-            Level += levels; 
+            Level += levels;
+            BunchkinsHub.UpdateLevel(this);
         }
 
         public void EquipItem(EquipmentCard equipment)
         {
             EquippedCards.RemoveAll(e => e.Slot == equipment.Slot);
             EquippedCards.Add(equipment);
+            BunchkinsHub.UpdatePlayer(this);
         }
 
         public void RemoveEquip(string slot)
         {
-                EquippedCards.RemoveAll(e => e.Slot == slot); 
+            EquippedCards.RemoveAll(e => e.Slot == slot);
+            BunchkinsHub.UpdatePlayer(this);
         }
 
         public void RemoveAllEquips()
         {
-                EquippedCards.Clear();
+            EquippedCards.Clear();
+            BunchkinsHub.UpdatePlayer(this);
         }
 
         public void AddHandCard(Card card)
         {
             Hand.Add(card);
-            // BunchkinsHub.UpdateHand(this);
+            BunchkinsHub.UpdateHand(this);
         }
 
         public void RemoveHandCards(int numCards)
@@ -98,7 +105,8 @@ namespace Bunchkins.Domain.Players
                 Hand.RemoveAt(index);
                 // Hand.GetRandomElement(c => c.CardId);
             }
-            
+
+            BunchkinsHub.UpdatePlayer(this);
         }
 
     }

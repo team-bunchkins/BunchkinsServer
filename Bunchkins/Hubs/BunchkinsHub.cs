@@ -245,39 +245,6 @@ namespace Bunchkins.Hubs
 
         #region Outgoing requests
 
-        internal static void UpdatePlayer(Game game, Player player)
-        {
-            var hubContext = GlobalHost.ConnectionManager.GetHubContext<BunchkinsHub>();
-            hubContext.Clients.Client(player.ConnectionId).updatePlayer(
-                new
-                {
-                    Name = player.Name,
-                    Level = player.Level,
-                    CombatPower = player.CombatPower,
-                    Hand = player.Hand,
-                    EquippedCards = player.EquippedCards
-                });
-
-            // TODO: Test, not sure this works to exclude the updated user
-            hubContext.Clients.Group(game.GameId.ToString()).AllExcept(player.ConnectionId).updateOpponent(
-                new
-                {
-                    Name = player.Name,
-                    Level = player.Level,
-                    CombatPower = player.CombatPower,
-                    HandSize = player.Hand.Count(),
-                    EquippedCards = player.EquippedCards
-                });
-        }
-
-        internal static void UpdateHand(Game game, Player player)
-        {
-            var hubContext = GlobalHost.ConnectionManager.GetHubContext<BunchkinsHub>();
-            hubContext.Clients.Client(player.ConnectionId).updateHand(player.Hand);
-            // TODO: Test, not sure this works to exclude the updated user
-            hubContext.Clients.Group(game.GameId.ToString()).AllExcept(player.ConnectionId).updateOpponentHand(player.Name, player.Hand.Count());
-        }
-
         internal static void UpdateState(Game game)
         {
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<BunchkinsHub>();
@@ -290,10 +257,66 @@ namespace Bunchkins.Hubs
             hubContext.Clients.Group(game.GameId.ToString()).activePlayerChanged(game.ActivePlayer.Name);
         }
 
+        internal static void UpdatePlayer(Game game, Player player)
+        {
+            // Update with hand info for updated player
+            var hubContext = GlobalHost.ConnectionManager.GetHubContext<BunchkinsHub>();
+            hubContext.Clients.Client(player.ConnectionId).updatePlayer(
+                new
+                {
+                    Name = player.Name,
+                    Level = player.Level,
+                    CombatPower = player.CombatPower,
+                    Hand = player.Hand,
+                    EquippedCards = player.EquippedCards
+                });
+
+            // Update with only hand size for other players
+            List<string> OtherConnectionIds = game.Players.Select(p => p.ConnectionId).Where(c => c != player.ConnectionId).ToList();
+            hubContext.Clients.Clients(OtherConnectionIds).updateOpponent(
+                new
+                {
+                    Name = player.Name,
+                    Level = player.Level,
+                    CombatPower = player.CombatPower,
+                    HandSize = player.Hand.Count(),
+                    EquippedCards = player.EquippedCards
+                });
+        }
+
+        internal static void UpdatePlayer(Player player)
+        {
+            Game game = GetGame(player);
+            UpdatePlayer(game, player);
+        }
+
+        internal static void UpdateHand(Game game, Player player)
+        {
+            // Update with hand contents for updated player
+            var hubContext = GlobalHost.ConnectionManager.GetHubContext<BunchkinsHub>();
+            hubContext.Clients.Client(player.ConnectionId).updateHand(player.Hand);
+
+            // Update with only hand size for other players
+            List<string> OtherConnectionIds = game.Players.Select(p => p.ConnectionId).Where(c => c != player.ConnectionId).ToList();
+            hubContext.Clients.Clients(OtherConnectionIds).updateOpponentHand(player.Name, player.Hand.Count());
+        }
+
+        internal static void UpdateHand(Player player)
+        {
+            Game game = GetGame(player);
+            UpdateHand(game, player);
+        }
+
         internal static void UpdateLevel(Game game, Player player)
         {
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<BunchkinsHub>();
             hubContext.Clients.Group(game.GameId.ToString()).updateLevel(player.Name, player.Level);
+        }
+
+        internal static void UpdateLevel(Player player)
+        {
+            Game game = GetGame(player);
+            UpdateLevel(game, player);
         }
 
         internal static void UpdateCombatState(Game game, CombatState combat)
@@ -329,6 +352,13 @@ namespace Bunchkins.Hubs
         {
             return GameManager.Instance.Games
                 .Where(x => x.GameId == gameId)
+                .SingleOrDefault();
+        }
+
+        private static Game GetGame(Player player)
+        {
+            return GameManager.Instance.Games
+                .Where(g => g.Players.Contains(player))
                 .SingleOrDefault();
         }
 
