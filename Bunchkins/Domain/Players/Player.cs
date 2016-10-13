@@ -19,9 +19,9 @@ namespace Bunchkins.Domain.Players
 
         public int Level { get; private set; }
 
-        public List<Card> Hand { get; set; }
+        public List<Card> Hand { get; private set; }
 
-        public List<EquipmentCard> EquippedCards { get; set; }
+        public List<EquipmentCard> EquippedCards { get; private set; }
 
         public bool IsActive { get; set; }
 
