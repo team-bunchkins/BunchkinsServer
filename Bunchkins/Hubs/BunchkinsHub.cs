@@ -132,12 +132,6 @@ namespace Bunchkins.Hubs
             }
 
             Clients.Group(game.GameId.ToString()).gameStarted();
-
-            // update hands
-            foreach (Player player in game.Players)
-            {
-                Clients.Client(player.ConnectionId).updateHand(player.Hand);
-            }
         }
 
         public void PlayCard(Guid gameId, string playerName, string targetName, Card card)

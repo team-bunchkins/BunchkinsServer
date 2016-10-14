@@ -26,7 +26,7 @@ namespace Bunchkins.Domain.Core.GameStates
             Monsters.Add(monster);
 
             PlayersPassed = new List<Player>();
-            BunchkinsHub.UpdateCombatState(Game, this);
+            BunchkinsHub.UpdateCombatState(game, this);
         }
 
         public override void HandleInput(Player player, Input input)

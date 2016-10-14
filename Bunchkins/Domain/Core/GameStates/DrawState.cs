@@ -19,7 +19,7 @@ namespace Bunchkins.Domain.Core.GameStates
             DoorCard card = game.DrawDoorCard();
             if (card is MonsterCard)
             {
-                Game.SetState(new CombatState(Game, (MonsterCard) card));
+                game.SetState(new CombatState(game, (MonsterCard) card));
             }
             else if (card is CurseCard)
             {
