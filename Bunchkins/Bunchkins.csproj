@@ -172,6 +172,7 @@
     <Compile Include="Domain\Players\Player.cs" />
     <Compile Include="Extension\DbSetExtensions.cs" />
     <Compile Include="Hubs\BunchkinsHub.cs" />
+    <Compile Include="Hubs\ConnectionMapping.cs" />
     <Compile Include="Infrastructure\BunchkinsDataContext.cs" />
     <Compile Include="Migrations\201610121911177_InitialCreate.cs" />
     <Compile Include="Migrations\201610121911177_InitialCreate.Designer.cs">

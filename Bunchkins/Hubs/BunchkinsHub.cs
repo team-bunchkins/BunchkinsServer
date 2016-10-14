@@ -18,6 +18,7 @@ namespace Bunchkins.Hubs
     {
         #region Connection management
 
+        private readonly static ConnectionMapping<string> _connections = new ConnectionMapping<string>();
         public override Task OnConnected()
         {
             // Reconnect player if already logged on?
@@ -37,6 +38,43 @@ namespace Bunchkins.Hubs
             }
 
             return base.OnConnected();
+        }
+
+        public override Task OnDisconnected(bool stopCalled)
+        {
+            // Add your own code here.
+            // For example: in a chat application, mark the user as offline, 
+            // delete the association between the current connection id and user name.
+            if (stopCalled)
+            {
+                string name = Context.User.Identity.Name;
+                _connections.Remove(name, Context.ConnectionId);
+                Console.WriteLine(String.Format("Client {0} explicitly closed connection.", Context.ConnectionId));
+
+            }
+            else
+            {
+                Console.WriteLine(String.Format("Client {0} timed out.", Context.ConnectionId));
+            }
+
+            return base.OnDisconnected(stopCalled);
+        }
+
+        public override Task OnReconnected()
+        {
+            // Add your own code here.
+            // For example: in a chat application, you might have marked the
+            // user as offline after a period of inactivity; in that case 
+            // mark the user as online again.
+
+            string name = Context.User.Identity.Name;
+
+            if (!_connections.GetConnections(name).Contains(Context.ConnectionId))
+            {
+                _connections.Add(name, Context.ConnectionId);
+            }
+
+            return base.OnReconnected();
         }
 
         #endregion
