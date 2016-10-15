@@ -160,13 +160,10 @@
     <Compile Include="Domain\Core\Game.cs" />
     <Compile Include="Domain\Core\GameManager.cs" />
     <Compile Include="Domain\Core\GameStates\CombatState.cs" />
-    <Compile Include="Domain\Core\GameStates\DoorLootState.cs" />
     <Compile Include="Domain\Core\GameStates\DrawState.cs" />
     <Compile Include="Domain\Core\GameStates\EndState.cs" />
     <Compile Include="Domain\Core\GameStates\GameState.cs" />
-    <Compile Include="Domain\Core\GameStates\LootState.cs" />
     <Compile Include="Domain\Core\GameStates\StartState.cs" />
-    <Compile Include="Domain\Core\GameStates\TreasureLootState.cs" />
     <Compile Include="Domain\Core\Input.cs" />
     <Compile Include="Domain\ITarget.cs" />
     <Compile Include="Domain\Players\Player.cs" />

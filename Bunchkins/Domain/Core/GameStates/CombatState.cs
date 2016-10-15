@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Bunchkins.Domain.Cards;
 using Bunchkins.Domain.Players;
 using Bunchkins.Domain.Cards.Door.Monsters;
-using Bunchkins.Domain.Cards.Door.Spells;
 using static Bunchkins.Domain.Core.Input;
 using Bunchkins.Hubs;
 
@@ -26,7 +22,7 @@ namespace Bunchkins.Domain.Core.GameStates
             Monsters.Add(monster);
 
             PlayersPassed = new List<Player>();
-            BunchkinsHub.UpdateCombatState(game, this);
+            BunchkinsHub.UpdateCombatState(Game, this);
         }
 
         public override void HandleInput(Player player, Input input)
@@ -60,10 +56,11 @@ namespace Bunchkins.Domain.Core.GameStates
             {
                 if (Game.ActivePlayer.CombatPower + PlayerCombatBonus > Monsters.Sum(m => m.Level) + MonsterCombatBonus)
                 {
-                    int treasures = Monsters.Sum(m => m.TreasureGain);
+                    int treasures = Monsters.Sum(m => m.TreasureGain) + PileOfTreasures;
 
                     BunchkinsHub.EndCombatState(Game);
-                    Game.SetState(new TreasureLootState(Game, treasures));
+                    Game.LootTreasure(treasures);
+                    Game.SetState(new EndState(Game));
                 }
                 // TODO: Error if player cannot defeat monster
             }
@@ -102,10 +99,12 @@ namespace Bunchkins.Domain.Core.GameStates
 
             BunchkinsHub.UpdateCombatState(Game, this);
         }
+
         public void AddMonsterTreasureBonus(int bonus)
         {
             PileOfTreasures += bonus;
         }
+
         public void RemoveMonster(MonsterCard monster, bool isLootable)
         {
             if (isLootable)
@@ -117,14 +116,20 @@ namespace Bunchkins.Domain.Core.GameStates
 
             if (Monsters.Count == 0 && isLootable)
             {
-                Game.SetState(new TreasureLootState(Game, PileOfTreasures));
+                Game.LootTreasure(PileOfTreasures);
+                BunchkinsHub.EndCombatState(Game);
+                Game.SetState(new EndState(Game));
             }
             else if (Monsters.Count == 0)
             {
-                Game.SetState(new TreasureLootState(Game, 0));
+                BunchkinsHub.EndCombatState(Game);
+                Game.SetState(new EndState(Game));
+            }
+            else
+            {
+                BunchkinsHub.UpdateCombatState(Game, this);
             }
 
-            BunchkinsHub.UpdateCombatState(Game, this);
         }
 
         public bool CanPlayerWin()

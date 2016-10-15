@@ -5,10 +5,8 @@ using Bunchkins.Domain.Core.GameStates;
 using Bunchkins.Domain.Players;
 using Bunchkins.Hubs;
 using Bunchkins.Infrastructure;
-using Microsoft.AspNet.SignalR;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -169,6 +167,19 @@ namespace Bunchkins.Domain.Core
             {
                 return db.Cards.OfType<MonsterCard>().GetRandomElement(c => c.CardId);
             }
+        }
+
+        public void LootTreasure(int numTreasures)
+        {
+            for (int i = 0; i < numTreasures; i++)
+            {
+                ActivePlayer.AddHandCard(DrawTreasureCard());
+            }
+        }
+
+        public void LootDoor()
+        {
+            ActivePlayer.AddHandCard(DrawDoorCardForHand());
         }
 
     }
