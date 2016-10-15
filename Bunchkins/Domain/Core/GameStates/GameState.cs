@@ -16,7 +16,6 @@ namespace Bunchkins.Domain.Core.GameStates
         public GameState(Game game)
         {
             Game = game;
-            Game.SetState(this);
         }
 
         public abstract void HandleInput(Player player, Input input);

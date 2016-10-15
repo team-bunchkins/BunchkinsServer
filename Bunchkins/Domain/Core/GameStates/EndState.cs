@@ -19,7 +19,7 @@ namespace Bunchkins.Domain.Core.GameStates
         {
             if (input == PROCEED)
             {
-                new StartState(Game);
+                Game.SetState(new StartState(Game));
             }
         }
 

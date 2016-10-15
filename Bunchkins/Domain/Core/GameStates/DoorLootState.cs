@@ -10,9 +10,9 @@ namespace Bunchkins.Domain.Core.GameStates
     {
         public DoorLootState(Game game) : base(game)
         {
-            Game.ActivePlayer.AddHandCard(Game.DrawDoorCardForHand());
+            game.ActivePlayer.AddHandCard(game.DrawDoorCard());
             
-            new EndState(Game);
+            game.SetState(new EndState(game));
         }
     }
 }

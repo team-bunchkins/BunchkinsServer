@@ -26,7 +26,7 @@ namespace Bunchkins.Domain.Core.GameStates
             Monsters.Add(monster);
 
             PlayersPassed = new List<Player>();
-            BunchkinsHub.UpdateCombatState(Game, this);
+            BunchkinsHub.UpdateCombatState(game, this);
         }
 
         public override void HandleInput(Player player, Input input)
@@ -49,7 +49,7 @@ namespace Bunchkins.Domain.Core.GameStates
                 }
 
                 BunchkinsHub.EndCombatState(Game);
-                new EndState(Game);
+                Game.SetState(new EndState(Game));
             }
             else if (input == PASS && !PlayersPassed.Any(p => p.Name == player.Name))
             {
@@ -63,7 +63,7 @@ namespace Bunchkins.Domain.Core.GameStates
                     int treasures = Monsters.Sum(m => m.TreasureGain);
 
                     BunchkinsHub.EndCombatState(Game);
-                    new TreasureLootState(Game, treasures);
+                    Game.SetState(new TreasureLootState(Game, treasures));
                 }
                 // TODO: Error if player cannot defeat monster
             }
@@ -117,11 +117,11 @@ namespace Bunchkins.Domain.Core.GameStates
 
             if (Monsters.Count == 0 && isLootable)
             {
-                new TreasureLootState(Game, PileOfTreasures);
+                Game.SetState(new TreasureLootState(Game, PileOfTreasures));
             }
             else if (Monsters.Count == 0)
             {
-                new TreasureLootState(Game, 0);
+                Game.SetState(new TreasureLootState(Game, 0));
             }
 
             BunchkinsHub.UpdateCombatState(Game, this);
