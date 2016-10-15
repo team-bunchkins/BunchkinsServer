@@ -51,7 +51,7 @@ namespace Bunchkins.Domain.Core
                 player.Hand.Add(DrawTreasureCard());
             }
 
-            SetState(new StartState(this));
+            new StartState(this);
             
             foreach(Player player in Players)
             {

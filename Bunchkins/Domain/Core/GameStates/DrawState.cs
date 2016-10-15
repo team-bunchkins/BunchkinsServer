@@ -16,19 +16,19 @@ namespace Bunchkins.Domain.Core.GameStates
     {
         public DrawState(Game game) : base(game)
         {
-            DoorCard card = game.DrawDoorCard();
+            DoorCard card = Game.DrawDoorCard();
             if (card is MonsterCard)
             {
-                game.SetState(new CombatState(game, (MonsterCard) card));
+                new CombatState(Game, (MonsterCard) card);
             }
             else if (card is CurseCard)
             {
-                ((CurseCard)card).Cast(game.ActivePlayer);
+                ((CurseCard)card).Cast(Game.ActivePlayer);
             }
             else
             {
                 //ADD TO HAND
-                game.ActivePlayer.AddHandCard(card);
+                Game.ActivePlayer.AddHandCard(card);
             }
         }
 
@@ -37,11 +37,11 @@ namespace Bunchkins.Domain.Core.GameStates
             if (input == FIGHT)
             {
                 MonsterCard card = Game.DrawMonsterCard();
-                Game.SetState(new CombatState(Game, card));
+                new CombatState(Game, card);
             }
             else if (input == PROCEED)
             {
-                Game.SetState(new DoorLootState(Game));
+                new DoorLootState(Game);
             }
         }
 

@@ -13,14 +13,14 @@ namespace Bunchkins.Domain.Core.GameStates
     {
         public StartState(Game game) : base(game)
         {
-            game.NextPlayer();
+            Game.NextPlayer();
         }
 
         public override void HandleInput(Player player, Input input)
         {
             if (input == PROCEED)
             {
-                Game.SetState(new DrawState(Game));
+                new DrawState(Game);
             }
         }
 
