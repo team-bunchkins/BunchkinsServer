@@ -33,6 +33,9 @@ namespace Bunchkins.Hubs
                 if (player != null)
                 {
                     player.ConnectionId = Context.ConnectionId;
+
+                    // _connections.Add(player.Name, player.ConnectionId);
+
                     Clients.Caller.updateSelf(player.Name);
                 }
             }
@@ -47,8 +50,12 @@ namespace Bunchkins.Hubs
             // delete the association between the current connection id and user name.
             if (stopCalled)
             {
-                string name = Context.User.Identity.Name;
-                _connections.Remove(name, Context.ConnectionId);
+                var player = GameManager.Instance.Players
+                    .Where(x => x.Name == Context.User.Identity.Name)
+                    .SingleOrDefault();
+                Game game = new Game();
+                game.Players.Remove(player);
+                // _connections.Remove(name, Context.ConnectionId);
                 Console.WriteLine(String.Format("Client {0} explicitly closed connection.", Context.ConnectionId));
 
             }
