@@ -11,6 +11,7 @@ using static Bunchkins.Domain.Core.Input;
 using Bunchkins.Domain.Core.GameStates;
 using Bunchkins.Domain.Cards;
 using Bunchkins.Domain.Cards.Treasure.Equipment;
+using Bunchkins.Infrastructure;
 
 namespace Bunchkins.Hubs
 {
@@ -134,11 +135,12 @@ namespace Bunchkins.Hubs
             Clients.Group(game.GameId.ToString()).gameStarted();
         }
 
-        public void PlayCard(Guid gameId, string playerName, string targetName, Card card)
+        public void PlayCard(Guid gameId, string playerName, string targetName, int cardId)
         {
-            var game = GetGame(gameId);
-            var player = GetPlayer(playerName);
-            var target = GetPlayer(targetName);
+            Game game = GetGame(gameId);
+            Player player = GetPlayer(playerName);
+            Player target = GetPlayer(targetName);
+            Card card = GetCard(cardId);
 
             if (game != null && game.Players.Any(p => p.ConnectionId == Context.ConnectionId))
             {
@@ -376,6 +378,14 @@ namespace Bunchkins.Hubs
             return GameManager.Instance.Players
                 .Where(x => x.Name == name)
                 .SingleOrDefault();
+        }
+
+        private Card GetCard(int cardId)
+        {
+            using (var db = new BunchkinsDataContext())
+            {
+                return db.Cards.Where(c => c.CardId == cardId).SingleOrDefault();
+            }
         }
 
         #endregion
