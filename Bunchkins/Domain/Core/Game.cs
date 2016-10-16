@@ -3,10 +3,10 @@ using Bunchkins.Domain.Cards.Door;
 using Bunchkins.Domain.Cards.Door.Monsters;
 using Bunchkins.Domain.Core.GameStates;
 using Bunchkins.Domain.Players;
+using Bunchkins.Hubs;
 using Bunchkins.Infrastructure;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -43,13 +43,18 @@ namespace Bunchkins.Domain.Core
             // Draw hands for players
             foreach (Player player in Players)
             {
-                player.Hand.Add(DrawDoorCard());
-                player.Hand.Add(DrawDoorCard());
+                player.Hand.Add(DrawDoorCardForHand());
+                player.Hand.Add(DrawDoorCardForHand());
                 player.Hand.Add(DrawTreasureCard());
                 player.Hand.Add(DrawTreasureCard());
             }
 
-            State = new StartState(this);
+            SetState(new StartState(this));
+            
+            foreach(Player player in Players)
+            {
+                BunchkinsHub.UpdatePlayer(this, player);
+            }
         }
 
         public void NextPlayer()
@@ -57,6 +62,9 @@ namespace Bunchkins.Domain.Core
             ActivePlayer.IsActive = false;
             mPlayerIterator.MoveNext();
             mPlayerIterator.Current.IsActive = true;
+
+            // Update frontend
+            BunchkinsHub.UpdateActivePlayer(this);
         }
 
         IEnumerable<Player> CreatePlayerIterator()
@@ -83,6 +91,8 @@ namespace Bunchkins.Domain.Core
         public void SetState(GameState state)
         {
             State = state;
+            // send update to clients
+            BunchkinsHub.UpdateState(this);
         }
 
         public DoorCard DrawDoorCard()
@@ -98,7 +108,7 @@ namespace Bunchkins.Domain.Core
                     isInHand = false;
 
                     // check whether card already exists in players' hand/equips
-                    if (Players.Exists(p => p.Hand.Contains(card)))
+                    if (Players.Any(p => p.Hand.Any(c => c.CardId == card.CardId)))
                     {
                         isInHand = true;
                     }
@@ -121,7 +131,7 @@ namespace Bunchkins.Domain.Core
                     isInHand = false;
 
                     // check whether card already exists in players' hand/equips
-                    if (Players.Exists(p => p.Hand.Contains(card)) || Players.Exists(p => p.EquippedCards.Contains(card)))
+                    if (Players.Any(p => p.Hand.Any(c => c.CardId == card.CardId)) || Players.Any(p => p.EquippedCards.Any(c => c.CardId == card.CardId)))
                     {
                         isInHand = true;
                     }
@@ -157,6 +167,19 @@ namespace Bunchkins.Domain.Core
             {
                 return db.Cards.OfType<MonsterCard>().GetRandomElement(c => c.CardId);
             }
+        }
+
+        public void LootTreasure(int numTreasures)
+        {
+            for (int i = 0; i < numTreasures; i++)
+            {
+                ActivePlayer.AddHandCard(DrawTreasureCard());
+            }
+        }
+
+        public void LootDoor()
+        {
+            ActivePlayer.AddHandCard(DrawDoorCardForHand());
         }
 
     }
