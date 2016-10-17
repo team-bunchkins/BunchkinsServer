@@ -71,12 +71,12 @@ namespace Bunchkins.Domain.Core.GameStates
             if (card is IAnytimeSpell)
             {
                 ((IAnytimeSpell)card).Cast(target);
-                player.Hand.Remove(card);
+                player.Discard(card);
             }
             else if (card is ICombatSpell)
             {
                 ((ICombatSpell)card).Cast(this);
-                player.Hand.Remove(card);
+                player.Discard(card);
             }
         }
 

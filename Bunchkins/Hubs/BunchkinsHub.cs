@@ -140,11 +140,15 @@ namespace Bunchkins.Hubs
             Game game = GetGame(gameId);
             Player player = GetPlayer(playerName);
             Player target = GetPlayer(targetName);
-            Card card = GetCard(cardId);
+            Card card = GetCard(cardId, player);
 
             if (game != null && game.Players.Any(p => p.ConnectionId == Context.ConnectionId))
             {
-                if ((game.State is CombatState && !(card is EquipmentCard)) || (!(game.State is CombatState) && !(card is ICombatSpell))) {
+                if (card == null)
+                {
+                    Clients.Caller.displayError("Could not find card.");
+                }
+                else if ((game.State is CombatState && !(card is EquipmentCard)) || (!(game.State is CombatState) && !(card is ICombatSpell))) {
                     game.State.PlayCard(player, target, card);
                 }
                 else
@@ -158,14 +162,22 @@ namespace Bunchkins.Hubs
             }
         }
 
-        public void Discard(Guid gameId, string playerName, Card card)
+        public void Discard(Guid gameId, string playerName, int cardId)
         {
-            var game = GetGame(gameId);
-            var player = GetPlayer(playerName);
+            Game game = GetGame(gameId);
+            Player player = GetPlayer(playerName);
+            Card card = GetCard(cardId, player);
 
             if (game != null && game.Players.Any(p => p.ConnectionId == Context.ConnectionId))
             {
-                player.Discard(card);
+                if (card == null)
+                {
+                    Clients.Caller.displayError("Could not find card.");
+                }
+                else
+                {
+                    player.Discard(card);
+                }
             }
             else
             {
@@ -380,11 +392,21 @@ namespace Bunchkins.Hubs
                 .SingleOrDefault();
         }
 
-        private Card GetCard(int cardId)
+        private Card GetCard(int cardId, Player player)
         {
-            using (var db = new BunchkinsDataContext())
+            // Check if card is in player's hand
+            if (player.Hand.Any(c => c.CardId == cardId))
             {
-                return db.Cards.Where(c => c.CardId == cardId).SingleOrDefault();
+                // Return card that is in player's hand
+                return player.Hand.Where(c => c.CardId == cardId)
+                    .SingleOrDefault();
+            }
+            else
+            {
+                // Return card that is equipped on player
+                // Returns null if neither conditions are met through SingleOrDefault.
+                return player.EquippedCards.Where(c => c.CardId == cardId)
+                    .SingleOrDefault();
             }
         }
 
