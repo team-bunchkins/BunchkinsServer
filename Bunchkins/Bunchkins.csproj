@@ -153,7 +153,6 @@
     <Compile Include="Domain\Cards\Treasure\Spells\BuffPlayerSpellCard.cs" />
     <Compile Include="Domain\Cards\Treasure\Spells\EscapeAllSpellCard.cs" />
     <Compile Include="Domain\Cards\Treasure\Spells\LevelUpSpellCard.cs" />
-    <Compile Include="Domain\Cards\Treasure\Spells\RemoveCurseSpellCard.cs" />
     <Compile Include="Domain\Cards\Treasure\Spells\TreasureSpellCard.cs" />
     <Compile Include="Domain\Cards\Treasure\Spells\VanquishMonsterSpellCard.cs" />
     <Compile Include="Domain\Cards\Treasure\TreasureCard.cs" />
