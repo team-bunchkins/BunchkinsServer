@@ -71,7 +71,33 @@ namespace Bunchkins.Domain.Players
 
         public void EquipItem(EquipmentCard equipment)
         {
-            EquippedCards.RemoveAll(e => e.Slot == equipment.Slot);
+            if (equipment.Slot == "2Hand")
+            {
+                // Check if player equips two-handed weapon,
+                // player should discard all one-handed weapons
+                EquippedCards.RemoveAll(e => e.Slot == "1Hand");
+                EquippedCards.RemoveAll(e => e.Slot == equipment.Slot);
+            }
+            else if (equipment.Slot == "1Hand")
+            {
+                // Check if player equips one-handed weapon, 
+                // player should discard two handed weapon
+                EquippedCards.RemoveAll(e => e.Slot == "2Hands");
+
+                // If player has more than two one-handed weapon,
+                // replace the weaker one
+                if (EquippedCards.Count(e => e.Slot == "1Hand") > 1)
+                {
+                    EquippedCards.Remove(EquippedCards.Where(e => e.Slot == "1Hand").OrderBy(e => e.Bonus).First());
+                }
+            }
+            else
+            {
+                // Remove all cards in the current slot
+                EquippedCards.RemoveAll(e => e.Slot == equipment.Slot);
+            }
+
+            // Add equipment to player
             EquippedCards.Add(equipment);
             BunchkinsHub.UpdatePlayer(this);
         }

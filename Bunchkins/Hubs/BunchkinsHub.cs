@@ -291,7 +291,13 @@ namespace Bunchkins.Hubs
                     Level = player.Level,
                     CombatPower = player.CombatPower,
                     Hand = player.Hand,
-                    EquippedCards = player.EquippedCards
+                    EquippedCards = new
+                    {
+                        Headgear = player.EquippedCards.Where(e => e.Slot == "Headgear").SingleOrDefault(),
+                        Armor = player.EquippedCards.Where(e => e.Slot == "Armor").SingleOrDefault(),
+                        Footgear = player.EquippedCards.Where(e => e.Slot == "Footgear").SingleOrDefault(),
+                        Weapons = player.EquippedCards.Where(e => e.Slot == "1Hand" || e.Slot == "2Hands")
+                    }
                 });
 
             // Update with only hand size for other players
