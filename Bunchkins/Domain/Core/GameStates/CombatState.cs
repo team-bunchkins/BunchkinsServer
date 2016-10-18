@@ -59,6 +59,7 @@ namespace Bunchkins.Domain.Core.GameStates
                     int treasures = Monsters.Sum(m => m.TreasureGain) + PileOfTreasures;
 
                     BunchkinsHub.EndCombatState(Game);
+                    player.IncreaseLevel(Monsters.Sum(m => m.LevelGain));
                     Game.LootTreasure(treasures);
                     Game.SetState(new EndState(Game));
                 }
