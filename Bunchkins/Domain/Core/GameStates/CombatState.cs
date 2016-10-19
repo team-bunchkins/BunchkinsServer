@@ -54,7 +54,11 @@ namespace Bunchkins.Domain.Core.GameStates
             }
             else if (input == PROCEED && PlayersPassed.Count() == Game.Players.Count() - 1)
             {
-                if (Game.ActivePlayer.CombatPower + PlayerCombatBonus > Monsters.Sum(m => m.Level) + MonsterCombatBonus)
+                if (((Game.ActivePlayer.CombatPower + PlayerCombatBonus) > (Monsters.Sum(m => m.Level) + MonsterCombatBonus)) && ((player.Level) + (Monsters.Sum(m => m.LevelGain)) >= 10))
+                {
+                    BunchkinsHub.Winzor(Game, player);
+                }
+                else
                 {
                     int treasures = Monsters.Sum(m => m.TreasureGain) + PileOfTreasures;
 
