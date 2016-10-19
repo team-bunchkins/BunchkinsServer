@@ -144,7 +144,7 @@ namespace Bunchkins.Domain.Core
         // Draw door cards, excluding monsters
         public DoorCard DrawDoorCardForHand()
         {
-           
+
             DoorCard card;
             bool isMonster = true;
 
@@ -159,6 +159,30 @@ namespace Bunchkins.Domain.Core
             } while (isMonster);
 
             return card;
+        }
+
+        // Draw any cards, excluding monsters
+        public Card DrawCardForHand()
+        {
+            using (var db = new BunchkinsDataContext())
+            {
+                bool isInHand = false;
+                Card card;
+
+                do
+                {
+                    card = db.Cards.OfType<TreasureCard>().GetRandomElement(c => c.CardId);
+                    isInHand = false;
+
+                    // check whether card already exists in players' hand/equips and if it is a monster
+                    if ((Players.Any(p => p.Hand.Any(c => c.CardId == card.CardId)) || Players.Any(p => p.EquippedCards.Any(c => c.CardId == card.CardId))) && !(card is MonsterCard))
+                    {
+                        isInHand = true;
+                    }
+                } while (isInHand);
+
+                return card;
+            }
         }
 
         public MonsterCard DrawMonsterCard()
@@ -179,7 +203,7 @@ namespace Bunchkins.Domain.Core
 
         public void LootDoor()
         {
-            ActivePlayer.AddHandCard(DrawDoorCardForHand());
+            ActivePlayer.AddHandCard(DrawCardForHand());
         }
 
     }
