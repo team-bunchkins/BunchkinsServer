@@ -24,8 +24,7 @@ namespace Bunchkins.Domain.Core.GameStates
             // Anytime spell or equipment
             if (card is EquipmentCard)
             {
-                // TODO: Check whether equipment is valid for user 
-                target.EquippedCards.Add((EquipmentCard)card);
+                target.EquipItem((EquipmentCard)card);
                 player.Discard(card);
             }
             else if (card is IAnytimeSpell)
