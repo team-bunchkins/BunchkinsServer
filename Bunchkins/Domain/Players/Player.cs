@@ -137,8 +137,7 @@ namespace Bunchkins.Domain.Players
         {
             var rand = new Random();
 
-            //TODO : While loop to check hand count is bigger than removal
-            for (int i = 0; i < numCards; i++)
+            for (int i = 0; i < numCards && Hand.Count() > 0; i++)
             {
                 var index = (int)(rand.NextDouble() * Hand.Count());
                 Hand.RemoveAt(index);
