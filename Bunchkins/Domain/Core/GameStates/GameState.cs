@@ -24,14 +24,13 @@ namespace Bunchkins.Domain.Core.GameStates
             // Anytime spell or equipment
             if (card is EquipmentCard)
             {
-                // TODO: Check whether equipment is valid for user 
-                target.EquippedCards.Add((EquipmentCard)card);
-                player.Hand.Remove(card);
+                target.EquipItem((EquipmentCard)card);
+                player.Discard(card);
             }
             else if (card is IAnytimeSpell)
             {
                 ((IAnytimeSpell)card).Cast(target);
-                player.Hand.Remove(card);
+                player.Discard(card);
             }
             else
             {

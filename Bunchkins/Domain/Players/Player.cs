@@ -34,6 +34,8 @@ namespace Bunchkins.Domain.Players
             }
         }
 
+        public bool Reconnecting { get; set; }
+
         public Player()
         {
             Hand = new List<Card>();
@@ -71,7 +73,33 @@ namespace Bunchkins.Domain.Players
 
         public void EquipItem(EquipmentCard equipment)
         {
-            EquippedCards.RemoveAll(e => e.Slot == equipment.Slot);
+            if (equipment.Slot == "2Hand")
+            {
+                // Check if player equips two-handed weapon,
+                // player should discard all one-handed weapons
+                EquippedCards.RemoveAll(e => e.Slot == "1Hand");
+                EquippedCards.RemoveAll(e => e.Slot == equipment.Slot);
+            }
+            else if (equipment.Slot == "1Hand")
+            {
+                // Check if player equips one-handed weapon, 
+                // player should discard two handed weapon
+                EquippedCards.RemoveAll(e => e.Slot == "2Hands");
+
+                // If player has more than two one-handed weapon,
+                // replace the weaker one
+                if (EquippedCards.Count(e => e.Slot == "1Hand") > 1)
+                {
+                    EquippedCards.Remove(EquippedCards.Where(e => e.Slot == "1Hand").OrderBy(e => e.Bonus).First());
+                }
+            }
+            else
+            {
+                // Remove all cards in the current slot
+                EquippedCards.RemoveAll(e => e.Slot == equipment.Slot);
+            }
+
+            // Add equipment to player
             EquippedCards.Add(equipment);
             BunchkinsHub.UpdatePlayer(this);
         }
@@ -111,8 +139,7 @@ namespace Bunchkins.Domain.Players
         {
             var rand = new Random();
 
-            //TODO : While loop to check hand count is bigger than removal
-            for (int i = 0; i < numCards; i++)
+            for (int i = 0; i < numCards && Hand.Count() > 0; i++)
             {
                 var index = (int)(rand.NextDouble() * Hand.Count());
                 Hand.RemoveAt(index);

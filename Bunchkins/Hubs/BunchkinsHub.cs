@@ -34,7 +34,9 @@ namespace Bunchkins.Hubs
                 if (player != null)
                 {
                     player.ConnectionId = Context.ConnectionId;
+                    player.Reconnecting = false;
                     Clients.Caller.updateSelf(player.Name);
+                    Clients.Others.userReconnected(player.Name);
                 }
             }
 
@@ -43,18 +45,24 @@ namespace Bunchkins.Hubs
 
         public override Task OnDisconnected(bool stopCalled)
         {
-            // Add your own code here.
-            // For example: in a chat application, mark the user as offline, 
-            // delete the association between the current connection id and user name.
             if (stopCalled)
             {
+                string userName = Context.User.Identity.Name;
+                string connectionId = Context.ConnectionId;
+
                 var player = GameManager.Instance.Players
-                    .Where(x => x.Name == Context.User.Identity.Name)
-                    .SingleOrDefault();
-                Game game = new Game();
-                game.Players.Remove(player);
-                // _connections.Remove(name, Context.ConnectionId);
-                Console.WriteLine(String.Format("Client {0} explicitly closed connection.", Context.ConnectionId));
+                    .FirstOrDefault(p => p.Name == Context.User.Identity.Name);
+
+                if (player != null)
+                {
+                    lock (player.ConnectionId)
+                    {
+                        player.Reconnecting = true;
+                        
+                        Clients.Others.userDisconnected(userName);
+                    }
+                }
+                Console.WriteLine(String.Format("Client {0} explicitly closed connection.", connectionId));
 
             }
             else
@@ -85,7 +93,7 @@ namespace Bunchkins.Hubs
 
         #endregion
 
-            #region Incoming requests
+        #region Incoming requests
 
         public void CreateGame(string playerName)
         {
@@ -165,6 +173,22 @@ namespace Bunchkins.Hubs
             }
         }
 
+        public void LeaveGame(Guid gameId, Player player)
+        {
+            //TODO: Create a LeaveGame method
+            Game game = GetGame(gameId);
+            if (game == null)
+            {
+                Clients.Caller.displayError("Could not find game.");
+                return;
+            }
+            else
+            {
+                game.Players.Remove(player);
+                GameManager.Instance.Players.Remove(player);
+            }
+        }
+
         public void StartGame(Guid gameId)
         {
             Game game = GetGame(gameId);
@@ -182,11 +206,17 @@ namespace Bunchkins.Hubs
             Game game = GetGame(gameId);
             Player player = GetPlayer(playerName);
             Player target = GetPlayer(targetName);
-            Card card = GetCard(cardId);
+
+            Card card = GetCard(cardId, player);
 
             if (game != null && game.Players.Any(p => p.ConnectionId == Context.ConnectionId))
             {
-                if ((game.State is CombatState && !(card is EquipmentCard)) || (!(game.State is CombatState) && !(card is ICombatSpell))) {
+                if (card == null)
+                {
+                    Clients.Caller.displayError("Could not find card.");
+                }
+                else if ((game.State is CombatState && !(card is EquipmentCard)) || (!(game.State is CombatState) && !(card is ICombatSpell))) {
+
                     game.State.PlayCard(player, target, card);
                 }
                 else
@@ -200,14 +230,23 @@ namespace Bunchkins.Hubs
             }
         }
 
-        public void Discard(Guid gameId, string playerName, Card card)
+        public void Discard(Guid gameId, string playerName, int cardId)
         {
-            var game = GetGame(gameId);
-            var player = GetPlayer(playerName);
+            Game game = GetGame(gameId);
+            Player player = GetPlayer(playerName);
+            Card card = GetCard(cardId, player);
 
             if (game != null && game.Players.Any(p => p.ConnectionId == Context.ConnectionId))
             {
-                player.Discard(card);
+                if (card == null)
+                {
+                    Clients.Caller.displayError("Could not find card.");
+                }
+                else
+                {
+                    player.Discard(card);
+                }
+
             }
             else
             {
@@ -321,7 +360,13 @@ namespace Bunchkins.Hubs
                     Level = player.Level,
                     CombatPower = player.CombatPower,
                     Hand = player.Hand,
-                    EquippedCards = player.EquippedCards
+                    EquippedCards = new
+                    {
+                        Headgear = player.EquippedCards.Where(e => e.Slot == "Headgear").SingleOrDefault(),
+                        Armor = player.EquippedCards.Where(e => e.Slot == "Armor").SingleOrDefault(),
+                        Footgear = player.EquippedCards.Where(e => e.Slot == "Footgear").SingleOrDefault(),
+                        Weapons = player.EquippedCards.Where(e => e.Slot == "1Hand" || e.Slot == "2Hands")
+                    }
                 });
 
             // Update with only hand size for other players
@@ -391,6 +436,8 @@ namespace Bunchkins.Hubs
             hubContext.Clients.Group(game.GameId.ToString()).endCombatState();
         }
 
+        //TODO: NotifyPlayerLeft
+
         //internal static void UpdatePassedPlayers(Game game, List<Player> players)
         //{
         //    var hubContext = GlobalHost.ConnectionManager.GetHubContext<BunchkinsHub>();
@@ -422,11 +469,22 @@ namespace Bunchkins.Hubs
                 .SingleOrDefault();
         }
 
-        private Card GetCard(int cardId)
+        private Card GetCard(int cardId, Player player)
         {
-            using (var db = new BunchkinsDataContext())
+            // Check if card is in player's hand
+            if (player.Hand.Any(c => c.CardId == cardId))
             {
-                return db.Cards.Where(c => c.CardId == cardId).SingleOrDefault();
+                // Return card that is in player's hand
+                return player.Hand.Where(c => c.CardId == cardId)
+                    .SingleOrDefault();
+            }
+            else
+            {
+                // Return card that is equipped on player
+                // Returns null if neither conditions are met through SingleOrDefault.
+                return player.EquippedCards.Where(c => c.CardId == cardId)
+                    .SingleOrDefault();
+
             }
         }
 

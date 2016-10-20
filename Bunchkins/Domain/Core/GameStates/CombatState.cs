@@ -59,6 +59,7 @@ namespace Bunchkins.Domain.Core.GameStates
                     int treasures = Monsters.Sum(m => m.TreasureGain) + PileOfTreasures;
 
                     BunchkinsHub.EndCombatState(Game);
+                    player.IncreaseLevel(Monsters.Sum(m => m.LevelGain));
                     Game.LootTreasure(treasures);
                     Game.SetState(new EndState(Game));
                 }
@@ -71,12 +72,12 @@ namespace Bunchkins.Domain.Core.GameStates
             if (card is IAnytimeSpell)
             {
                 ((IAnytimeSpell)card).Cast(target);
-                player.Hand.Remove(card);
+                player.Discard(card);
             }
             else if (card is ICombatSpell)
             {
                 ((ICombatSpell)card).Cast(this);
-                player.Hand.Remove(card);
+                player.Discard(card);
             }
         }
 

@@ -2,6 +2,7 @@
 using Bunchkins.Domain.Core.GameStates;
 using Bunchkins.Domain.Players;
 using System;
+using System.Collections.Generic;
 
 namespace Bunchkins.Domain.Cards.Treasure.Spells
 {
@@ -11,7 +12,9 @@ namespace Bunchkins.Domain.Cards.Treasure.Spells
         public void Cast(CombatState combat)
         {
             //Make monsters in combat go away
-            foreach (MonsterCard monster in combat.Monsters)
+            MonsterCard[] monstersToRemove = combat.Monsters.ToArray();
+
+            foreach (MonsterCard monster in monstersToRemove)
             {
                 combat.RemoveMonster(monster, false);
             }
