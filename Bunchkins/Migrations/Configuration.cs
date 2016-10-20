@@ -76,7 +76,7 @@ namespace Bunchkins.Migrations
                 context.Cards.Add(new LoseEquipCurseCard { Description = "Target Loses Headgear", FlavorText = "You should use better dandruff shampoo to keep these away.", Name = "Chicken on your head", Slot = "Headgear", Type = "Curse" });
                 context.Cards.Add(new LoseEquipCurseCard { Description = "Target Loses Armor", FlavorText = "The quality was not worth the price.", Name = "Knockoff Armor Polish", Slot = "Armor", Type = "Curse" });
                 context.Cards.Add(new LoseEquipCurseCard { Description = "Target Loses Headgear", FlavorText = "Probably some wizards sick joke.", Name = "Flying Hat", Slot = "Headgear", Type = "Curse" });
-                context.Cards.Add(new LoseEquipCurseCard { Description = "Target Loses 1 Hander", FlavorText = "You really don't know how to maintain your weapon do you?", Name = "Bumby Grind Stone", Slot = "1Hand", Type = "Curse" });
+                context.Cards.Add(new LoseEquipCurseCard { Description = "Target Loses 1 Hander", FlavorText = "You really don't know how to maintain your weapon do you?", Name = "Bumpy Grind Stone", Slot = "1Hand", Type = "Curse" });
                 context.Cards.Add(new LoseEquipCurseCard { Description = "Target Loses 2 Hander", FlavorText = "It REALLY wanted your two hander.", Name = "Very Accurate Black Hole", Slot = "2Hands", Type = "Curse" });
 
                 context.Cards.Add(new LoseHandCardsCurseCard { Description = "Target Loses 2 Cards from Hand", FlavorText = "On the bright side, you can use toast as papertowels.", Name = "Butter Fingers", NumCards = 2 , Type = "Curse" });
