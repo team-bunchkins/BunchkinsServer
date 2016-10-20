@@ -339,7 +339,7 @@ namespace Bunchkins.Hubs
         internal static void UpdateLevel(Game game, Player player)
         {
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<BunchkinsHub>();
-            hubContext.Clients.Group(game.GameId.ToString()).updateLevel(player.Name, player.Level);
+            hubContext.Clients.Group(game.GameId.ToString()).updateLevel(player.Name, player.Level, player.CombatPower);
         }
 
         internal static void UpdateLevel(Player player)
