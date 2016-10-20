@@ -340,13 +340,13 @@ namespace Bunchkins.Hubs
         internal static void UpdateState(Game game)
         {
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<BunchkinsHub>();
-            hubContext.Clients.Group(game.GameId.ToString()).stateChanged(game.State.GetType().Name);
+            hubContext.Clients.Group(game.GameId.ToString()).updateState(game.State.GetType().Name);
         }
 
         internal static void UpdateActivePlayer(Game game)
         {
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<BunchkinsHub>();
-            hubContext.Clients.Group(game.GameId.ToString()).activePlayerChanged(game.ActivePlayer.Name);
+            hubContext.Clients.Group(game.GameId.ToString()).updateActivePlayer(game.ActivePlayer.Name);
         }
 
         internal static void UpdatePlayer(Game game, Player player)
@@ -408,7 +408,7 @@ namespace Bunchkins.Hubs
         internal static void UpdateLevel(Game game, Player player)
         {
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<BunchkinsHub>();
-            hubContext.Clients.Group(game.GameId.ToString()).updateLevel(player.Name, player.Level);
+            hubContext.Clients.Group(game.GameId.ToString()).updateLevel(player.Name, player.Level, player.CombatPower);
         }
 
         internal static void UpdateLevel(Player player)
