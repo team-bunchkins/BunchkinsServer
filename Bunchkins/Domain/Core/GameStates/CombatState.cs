@@ -52,9 +52,9 @@ namespace Bunchkins.Domain.Core.GameStates
                 PlayersPassed.Add(player);
                 BunchkinsHub.UpdateCombatState(Game, this);
             }
-            else if (input == PROCEED && PlayersPassed.Count() == Game.Players.Count() - 1)
+            else if ((input == PROCEED && PlayersPassed.Count() == Game.Players.Count() - 1) && CanPlayerWinCombat())
             {
-                if (((Game.ActivePlayer.CombatPower + PlayerCombatBonus) > (Monsters.Sum(m => m.Level) + MonsterCombatBonus)) && ((player.Level) + (Monsters.Sum(m => m.LevelGain)) >= 10))
+                if ((player.Level) + (Monsters.Sum(m => m.LevelGain)) >= 10)
                 {
                     BunchkinsHub.Winzor(Game, player);
                 }
@@ -137,7 +137,7 @@ namespace Bunchkins.Domain.Core.GameStates
 
         }
 
-        public bool CanPlayerWin()
+        public bool CanPlayerWinCombat()
         {
             int playerPower = Game.ActivePlayer.CombatPower + PlayerCombatBonus;
             int monsterPower = Monsters.Sum(m => m.Level) + MonsterCombatBonus;

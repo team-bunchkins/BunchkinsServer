@@ -43,5 +43,17 @@ namespace Bunchkins.Domain.Core
             Players.Add(player);
             return true;
         }
+
+        public void RemoveGame(Game game)
+        {
+            //Remove players from list of players
+            foreach (Player player in game.Players)
+            {
+                Players.Remove(player);
+            }
+            
+            //Remove game from list of games
+            Games.Remove(game);
+        }
     }
 }
