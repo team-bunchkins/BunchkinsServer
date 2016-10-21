@@ -78,13 +78,13 @@ namespace Bunchkins.Migrations
                 context.Cards.Add(new LoseAllEquipCurseCard { Description = "Target Player Loses all Equipment", FlavorText = "Either way, your friends still think your pretty.", Name = "Change Sex", Type = "Curse"});
                 context.Cards.Add(new LoseAllEquipCurseCard { Description = "Target Player Loses all Equipment", FlavorText = "The Man has come for what you owe.", Name = "Income Tax", Type = "Curse" });
 
-                context.Cards.Add(new LoseEquipCurseCard { Description = "Target Player Loses Footgear", FlavorText = "It's not the good kind of sticky.", Name = "Tar Trap", Slot = "Footgear", Type = "Curse" });
-                context.Cards.Add(new LoseEquipCurseCard { Description = "Target Player Loses Headgear", FlavorText = "Standing under it with a metal helmet wasn't a good idea.", Name = "Giant Magnet", Slot = "Headgear", Type = "Curse" });
-                context.Cards.Add(new LoseEquipCurseCard { Description = "Target Player Loses Headgear", FlavorText = "You should use better dandruff shampoo to keep these away.", Name = "Chicken on your head", Slot = "Headgear", Type = "Curse" });
-                context.Cards.Add(new LoseEquipCurseCard { Description = "Target Player Loses Armor", FlavorText = "The quality was not worth the price.", Name = "Knockoff Armor Polish", Slot = "Armor", Type = "Curse" });
-                context.Cards.Add(new LoseEquipCurseCard { Description = "Target Player Loses Headgear", FlavorText = "Probably some wizards sick joke.", Name = "Flying Hat", Slot = "Headgear", Type = "Curse" });
-                context.Cards.Add(new LoseEquipCurseCard { Description = "Target Player Loses 1 Hander", FlavorText = "You really don't know how to maintain your weapon do you?", Name = "Bumby Grind Stone", Slot = "1Hand", Type = "Curse" });
-                context.Cards.Add(new LoseEquipCurseCard { Description = "Target Player Loses 2 Hander", FlavorText = "It REALLY wanted your two hander.", Name = "Very Accurate Black Hole", Slot = "2Hands", Type = "Curse" });
+                context.Cards.Add(new LoseEquipCurseCard { Description = "Target Loses Footgear", FlavorText = "It's not the good kind of sticky.", Name = "Tar Trap", Slot = "Footgear", Type = "Curse" });
+                context.Cards.Add(new LoseEquipCurseCard { Description = "Target Loses Headgear", FlavorText = "Standing under it with a metal helmet wasn't a good idea.", Name = "Giant Magnet", Slot = "Headgear", Type = "Curse" });
+                context.Cards.Add(new LoseEquipCurseCard { Description = "Target Loses Headgear", FlavorText = "You should use better dandruff shampoo to keep these away.", Name = "Chicken on your head", Slot = "Headgear", Type = "Curse" });
+                context.Cards.Add(new LoseEquipCurseCard { Description = "Target Loses Armor", FlavorText = "The quality was not worth the price.", Name = "Knockoff Armor Polish", Slot = "Armor", Type = "Curse" });
+                context.Cards.Add(new LoseEquipCurseCard { Description = "Target Loses Headgear", FlavorText = "Probably some wizards sick joke.", Name = "Flying Hat", Slot = "Headgear", Type = "Curse" });
+                context.Cards.Add(new LoseEquipCurseCard { Description = "Target Loses 1 Hander", FlavorText = "You really don't know how to maintain your weapon do you?", Name = "Bumpy Grind Stone", Slot = "1Hand", Type = "Curse" });
+                context.Cards.Add(new LoseEquipCurseCard { Description = "Target Loses 2 Hander", FlavorText = "It REALLY wanted your two hander.", Name = "Very Accurate Black Hole", Slot = "2Hands", Type = "Curse" });
 
                 context.Cards.Add(new LoseHandCardsCurseCard { Description = "Target Player Loses 2 Cards from Hand", FlavorText = "On the bright side, you can use toast as papertowels.", Name = "Butter Fingers", NumCards = 2 , Type = "Curse" });
                 context.Cards.Add(new LoseHandCardsCurseCard { Description = "Target Player Loses 1 Card from Hand", FlavorText = "An Underhanded tactic....but effective.", Name = "Poked In The Eye", NumCards = 1, Type = "Curse" });
