@@ -438,7 +438,15 @@ namespace Bunchkins.Hubs
             hubContext.Clients.Group(game.GameId.ToString()).endCombatState();
         }
 
+
         //TODO: NotifyPlayerLeft
+
+        internal static void Winzor(Game game, Player player)
+        {
+            var hubContext = GlobalHost.ConnectionManager.GetHubContext<BunchkinsHub>();
+            hubContext.Clients.Group(game.GameId.ToString()).winzor();
+        }
+
 
         //internal static void UpdatePassedPlayers(Game game, List<Player> players)
         //{

@@ -67,7 +67,14 @@ namespace Bunchkins.Domain.Players
 
         public void IncreaseLevel(int levels)
         {
-            Level += levels;
+            if ((Level + levels) <= 9)
+            {
+                Level += levels;
+            }
+            else
+            {
+                Level = 9;
+            }
             BunchkinsHub.UpdateLevel(this);
         }
 
