@@ -31,8 +31,13 @@ namespace Bunchkins.Domain.Core
         public Game CreateGame(Player player)
         {
             Game game = new Game();
+            // Add new game to GameManager game list
             Games.Add(game);
+
+            // Add new player to game
             game.Players.Add(player);
+
+            // Add new player to GameManager player list
             Players.Add(player);
             return game;
         }
@@ -51,9 +56,26 @@ namespace Bunchkins.Domain.Core
             {
                 Players.Remove(player);
             }
-            
+
             //Remove game from list of games
             Games.Remove(game);
+        }
+
+        public void RemovePlayer(Game game, Player player)
+        {
+            // Remove player from list in GameManager
+            Players.Remove(player);
+
+            // Remove player from game
+            game.Players.Remove(player);
+
+            // Check if player is the last one removed,
+            // then game should be removed from GameManager
+            if (game.Players.Count() < 1)
+            {
+                // "Nuke it! PEWWWW..." - Katie
+                Games.Remove(game);
+            }
         }
     }
 }

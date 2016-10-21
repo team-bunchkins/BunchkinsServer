@@ -34,6 +34,8 @@ namespace Bunchkins.Domain.Players
             }
         }
 
+        public bool Reconnecting { get; set; }
+
         public Player()
         {
             Hand = new List<Card>();

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -34,11 +34,61 @@ namespace Bunchkins.Hubs
                 if (player != null)
                 {
                     player.ConnectionId = Context.ConnectionId;
+                    player.Reconnecting = false;
                     Clients.Caller.updateSelf(player.Name);
+                    Clients.Others.userReconnected(player.Name);
                 }
             }
 
             return base.OnConnected();
+        }
+
+        public override Task OnDisconnected(bool stopCalled)
+        {
+            if (stopCalled)
+            {
+                string userName = Context.User.Identity.Name;
+                string connectionId = Context.ConnectionId;
+
+                var player = GameManager.Instance.Players
+                    .FirstOrDefault(p => p.Name == Context.User.Identity.Name);
+
+                if (player != null)
+                {
+                    lock (player.ConnectionId)
+                    {
+                        player.Reconnecting = true;
+                        
+                        Clients.Others.userDisconnected(userName);
+                    }
+                }
+                Console.WriteLine(String.Format("Client {0} explicitly closed connection.", connectionId));
+
+            }
+            else
+            {
+                Console.WriteLine(String.Format("Client {0} timed out.", Context.ConnectionId));
+            }
+
+            return base.OnDisconnected(stopCalled);
+        }
+
+        public override Task OnReconnected()
+        {
+            // Add your own code here.
+            // For example: in a chat application, you might have marked the
+            // user as offline after a period of inactivity; in that case 
+            // mark the user as online again.
+
+            /* string name = Context.User.Identity.Name;
+
+            if (!_connections.GetConnections(name).Contains(Context.ConnectionId))
+            {
+                _connections.Add(name, Context.ConnectionId);
+            }
+            */
+
+            return base.OnReconnected();
         }
 
         #endregion
@@ -123,6 +173,26 @@ namespace Bunchkins.Hubs
             }
         }
 
+        public void LeaveGame(Guid gameId, String playerName)
+        {
+            Game game = GetGame(gameId);
+            Player player = GetPlayer(playerName);
+
+            if (game == null)
+            {
+                // Check if game exists for player to be removed from
+                Clients.Caller.displayError("Could not find game.");
+                return;
+            }
+            else
+            {
+                // Remove player from game and game manager
+                Groups.Remove(player.ConnectionId, game.GameId.ToString());
+                GameManager.Instance.RemovePlayer(game, player);
+                Clients.Group(game.GameId.ToString()).playerLeft(player.Name);
+            }
+        }
+
         public void StartGame(Guid gameId)
         {
             Game game = GetGame(gameId);
@@ -140,6 +210,7 @@ namespace Bunchkins.Hubs
             Game game = GetGame(gameId);
             Player player = GetPlayer(playerName);
             Player target = GetPlayer(targetName);
+
             Card card = GetCard(cardId, player);
 
             if (game != null && game.Players.Any(p => p.ConnectionId == Context.ConnectionId))
@@ -149,6 +220,7 @@ namespace Bunchkins.Hubs
                     Clients.Caller.displayError("Could not find card.");
                 }
                 else if ((game.State is CombatState && !(card is EquipmentCard)) || (!(game.State is CombatState) && !(card is ICombatSpell))) {
+
                     game.State.PlayCard(player, target, card);
                 }
                 else
@@ -178,6 +250,7 @@ namespace Bunchkins.Hubs
                 {
                     player.Discard(card);
                 }
+
             }
             else
             {
@@ -373,6 +446,7 @@ namespace Bunchkins.Hubs
             hubContext.Clients.Group(game.GameId.ToString()).winzor();
         }
 
+
         //internal static void UpdatePassedPlayers(Game game, List<Player> players)
         //{
         //    var hubContext = GlobalHost.ConnectionManager.GetHubContext<BunchkinsHub>();
@@ -419,6 +493,7 @@ namespace Bunchkins.Hubs
                 // Returns null if neither conditions are met through SingleOrDefault.
                 return player.EquippedCards.Where(c => c.CardId == cardId)
                     .SingleOrDefault();
+
             }
         }
 
