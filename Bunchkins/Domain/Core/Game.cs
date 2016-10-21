@@ -86,6 +86,8 @@ namespace Bunchkins.Domain.Core
         public void PlayCard(Player player, Player target, Card card)
         {
             State.PlayCard(player, target, card);
+
+            BunchkinsHub.CardPlayed(this, player, target, card);
         }
 
         public void SetState(GameState state)

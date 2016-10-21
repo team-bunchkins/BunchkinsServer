@@ -220,8 +220,7 @@ namespace Bunchkins.Hubs
                     Clients.Caller.displayError("Could not find card.");
                 }
                 else if ((game.State is CombatState && !(card is EquipmentCard)) || (!(game.State is CombatState) && !(card is ICombatSpell))) {
-
-                    game.State.PlayCard(player, target, card);
+                    game.PlayCard(player, target, card);
                 }
                 else
                 {
@@ -432,6 +431,24 @@ namespace Bunchkins.Hubs
                     MonsterCombatBonus = combat.MonsterCombatBonus,
                     PlayersPassed = combat.PlayersPassed.Select(p => p.Name)
                 });
+        }
+
+        internal static void CardPlayed(Game game, Player player, Player target, Card card)
+        {
+            var hubContext = GlobalHost.ConnectionManager.GetHubContext<BunchkinsHub>();
+            hubContext.Clients.Group(game.GameId.ToString()).cardPlayed(player.Name, target.Name, card);
+        }
+
+        internal static void CardsDrawn(Game game, Player player, List<Card> cards)
+        {
+            var hubContext = GlobalHost.ConnectionManager.GetHubContext<BunchkinsHub>();
+            hubContext.Clients.Group(game.GameId.ToString()).cardsDrawn(player.Name, cards);
+        }
+
+        internal static void CardsDrawnFaceDown(Game game, Player player, int numCards)
+        {
+            var hubContext = GlobalHost.ConnectionManager.GetHubContext<BunchkinsHub>();
+            hubContext.Clients.Group(game.GameId.ToString()).cardsDrawn(player.Name, numCards);
         }
 
         internal static void EndCombatState(Game game)
