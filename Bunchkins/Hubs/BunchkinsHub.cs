@@ -173,9 +173,10 @@ namespace Bunchkins.Hubs
             }
         }
 
-        public void LeaveGame(Guid gameId, Player player)
+        public void LeaveGame(Guid gameId, String playerName)
         {
             Game game = GetGame(gameId);
+            Player player = GetPlayer(playerName);
 
             if (game == null)
             {
@@ -186,8 +187,9 @@ namespace Bunchkins.Hubs
             else
             {
                 // Remove player from game and game manager
-                game.Players.Remove(player);
-                GameManager.Instance.Players.Remove(player);
+                Groups.Remove(player.ConnectionId, game.GameId.ToString());
+                GameManager.Instance.RemovePlayer(game, player);
+                Clients.Group(game.GameId.ToString()).playerLeft(player.Name);
             }
         }
 
@@ -437,9 +439,6 @@ namespace Bunchkins.Hubs
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<BunchkinsHub>();
             hubContext.Clients.Group(game.GameId.ToString()).endCombatState();
         }
-
-
-        //TODO: NotifyPlayerLeft
 
         internal static void Winzor(Game game, Player player)
         {
