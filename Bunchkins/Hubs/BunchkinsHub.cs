@@ -175,15 +175,17 @@ namespace Bunchkins.Hubs
 
         public void LeaveGame(Guid gameId, Player player)
         {
-            //TODO: Create a LeaveGame method
             Game game = GetGame(gameId);
+
             if (game == null)
             {
+                // Check if game exists for player to be removed from
                 Clients.Caller.displayError("Could not find game.");
                 return;
             }
             else
             {
+                // Remove player from game and game manager
                 game.Players.Remove(player);
                 GameManager.Instance.Players.Remove(player);
             }
