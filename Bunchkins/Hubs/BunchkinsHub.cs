@@ -443,7 +443,14 @@ namespace Bunchkins.Hubs
         internal static void Winzor(Game game, Player player)
         {
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<BunchkinsHub>();
-            hubContext.Clients.Group(game.GameId.ToString()).winzor();
+            hubContext.Clients.Group(game.GameId.ToString()).winzor(player);
+
+            foreach (Player p in game.Players)
+            {
+                hubContext.Groups.Remove(p.ConnectionId, game.GameId.ToString());
+            }
+
+            GameManager.Instance.RemoveGame(game);
         }
 
 
