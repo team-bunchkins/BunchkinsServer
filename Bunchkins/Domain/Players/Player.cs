@@ -80,7 +80,7 @@ namespace Bunchkins.Domain.Players
 
         public void EquipItem(EquipmentCard equipment)
         {
-            if (equipment.Slot == "2Hand")
+            if (equipment.Slot == "2Hands")
             {
                 // Check if player equips two-handed weapon,
                 // player should discard all one-handed weapons
