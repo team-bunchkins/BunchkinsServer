@@ -94,7 +94,7 @@ namespace Bunchkins.Domain.Core
         {
             State = state;
             // send update to clients
-            BunchkinsHub.UpdateState(this);
+            BunchkinsHub.UpdateState(this, State);
         }
 
         public DoorCard DrawDoorCard()

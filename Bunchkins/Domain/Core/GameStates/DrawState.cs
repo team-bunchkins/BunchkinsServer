@@ -1,13 +1,16 @@
 ﻿using Bunchkins.Domain.Players;
 using Bunchkins.Domain.Cards.Door.Monsters;
 using static Bunchkins.Domain.Core.Input;
+using Bunchkins.Domain.Cards;
 
 namespace Bunchkins.Domain.Core.GameStates
 {
     class DrawState : GameState
     {
-        public DrawState(Game game) : base(game)
+        public Card CardDrawn { get; private set; }
+        public DrawState(Game game, Card card) : base(game)
         {
+            CardDrawn = card;
         }
 
         public override void HandleInput(Player player, Input input)
@@ -20,7 +23,7 @@ namespace Bunchkins.Domain.Core.GameStates
             else if (input == PROCEED)
             {
                 Game.LootDoor();
-                Game.SetState(new EndState(Game));
+                Game.SetState(new EndState(Game, 1));
             }
         }
 

@@ -340,10 +340,53 @@ namespace Bunchkins.Hubs
 
         #region Outgoing requests
 
-        internal static void UpdateState(Game game)
+        internal static void UpdateState(Game game, GameState state)
         {
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<BunchkinsHub>();
-            hubContext.Clients.Group(game.GameId.ToString()).updateState(game.State.GetType().Name);
+
+            if (state is StartState)
+            {
+                var stateDTO = new { Name = state.GetType().Name };
+                hubContext.Clients.Group(game.GameId.ToString()).updateState(stateDTO);
+            }
+            else if (state is DrawState)
+            {
+                var stateDTO = new
+                {
+                    Name = state.GetType().Name,
+                    Card = ((DrawState)state).CardDrawn
+                };
+                hubContext.Clients.Group(game.GameId.ToString()).updateState(stateDTO);
+            }
+            else if (state is CombatState)
+            {
+                UpdateCombatState(game, (CombatState)state);
+            }
+            else if (state is EndState)
+            {
+                var stateDTO = new
+                {
+                    Name = state.GetType().Name,
+                    NumCards = ((EndState)state).NumCards,
+                    CombatResults = ((EndState)state).CombatResults
+                };
+                hubContext.Clients.Group(game.GameId.ToString()).updateState(stateDTO);
+            }
+        }
+
+        internal static void UpdateCombatState(Game game, CombatState combat)
+        {
+            var hubContext = GlobalHost.ConnectionManager.GetHubContext<BunchkinsHub>();
+            hubContext.Clients.Group(game.GameId.ToString()).updateState(
+                new
+                {
+                    Name = combat.GetType().Name,
+                    Monsters = combat.Monsters,
+                    MonsterCombatPower = combat.Monsters.Sum(m => m.Level),
+                    PlayerCombatBonus = combat.PlayerCombatBonus,
+                    MonsterCombatBonus = combat.MonsterCombatBonus,
+                    PlayersPassed = combat.PlayersPassed.Select(p => p.Name)
+                });
         }
 
         internal static void UpdateActivePlayer(Game game)
@@ -420,42 +463,17 @@ namespace Bunchkins.Hubs
             UpdateLevel(game, player);
         }
 
-        internal static void UpdateCombatState(Game game, CombatState combat)
-        {
-            var hubContext = GlobalHost.ConnectionManager.GetHubContext<BunchkinsHub>();
-            hubContext.Clients.Group(game.GameId.ToString()).updateCombatState(
-                new {
-                    Monsters = combat.Monsters,
-                    MonsterCombatPower = combat.Monsters.Sum(m => m.Level),
-                    PlayerCombatBonus = combat.PlayerCombatBonus,
-                    MonsterCombatBonus = combat.MonsterCombatBonus,
-                    PlayersPassed = combat.PlayersPassed.Select(p => p.Name)
-                });
-        }
-
         internal static void CardPlayed(Game game, Player player, Player target, Card card)
         {
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<BunchkinsHub>();
             hubContext.Clients.Group(game.GameId.ToString()).cardPlayed(player.Name, target.Name, card);
         }
 
-        internal static void CardsDrawn(Game game, Player player, List<Card> cards)
-        {
-            var hubContext = GlobalHost.ConnectionManager.GetHubContext<BunchkinsHub>();
-            hubContext.Clients.Group(game.GameId.ToString()).cardsDrawn(player.Name, cards);
-        }
-
-        internal static void CardsDrawnFaceDown(Game game, Player player, int numCards)
-        {
-            var hubContext = GlobalHost.ConnectionManager.GetHubContext<BunchkinsHub>();
-            hubContext.Clients.Group(game.GameId.ToString()).cardsDrawn(player.Name, numCards);
-        }
-
-        internal static void EndCombatState(Game game)
-        {
-            var hubContext = GlobalHost.ConnectionManager.GetHubContext<BunchkinsHub>();
-            hubContext.Clients.Group(game.GameId.ToString()).endCombatState();
-        }
+        //internal static void EndCombatState(Game game)
+        //{
+        //    var hubContext = GlobalHost.ConnectionManager.GetHubContext<BunchkinsHub>();
+        //    hubContext.Clients.Group(game.GameId.ToString()).endCombatState();
+        //}
 
         internal static void Winzor(Game game, Player player)
         {
@@ -469,13 +487,6 @@ namespace Bunchkins.Hubs
 
             GameManager.Instance.RemoveGame(game);
         }
-
-
-        //internal static void UpdatePassedPlayers(Game game, List<Player> players)
-        //{
-        //    var hubContext = GlobalHost.ConnectionManager.GetHubContext<BunchkinsHub>();
-        //    hubContext.Clients.Group(game.GameId.ToString()).updatePassedPlayers(players.Select(p => p.Name));
-        //}
 
         #endregion
 
