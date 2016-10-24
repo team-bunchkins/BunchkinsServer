@@ -168,7 +168,6 @@
     <Compile Include="Domain\Players\Player.cs" />
     <Compile Include="Extension\DbSetExtensions.cs" />
     <Compile Include="Hubs\BunchkinsHub.cs" />
-    <Compile Include="Hubs\ConnectionMapping.cs" />
     <Compile Include="Infrastructure\BunchkinsDataContext.cs" />
     <Compile Include="Migrations\201610121911177_InitialCreate.cs" />
     <Compile Include="Migrations\201610121911177_InitialCreate.Designer.cs">
@@ -181,6 +180,10 @@
     <Compile Include="Migrations\201610132133583_BonusTreasureAddedToSpells.cs" />
     <Compile Include="Migrations\201610132133583_BonusTreasureAddedToSpells.Designer.cs">
       <DependentUpon>201610132133583_BonusTreasureAddedToSpells.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201610242110005_PictureUrlAdded.cs" />
+    <Compile Include="Migrations\201610242110005_PictureUrlAdded.Designer.cs">
+      <DependentUpon>201610242110005_PictureUrlAdded.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -196,6 +199,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201610132133583_BonusTreasureAddedToSpells.resx">
       <DependentUpon>201610132133583_BonusTreasureAddedToSpells.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610242110005_PictureUrlAdded.resx">
+      <DependentUpon>201610242110005_PictureUrlAdded.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
