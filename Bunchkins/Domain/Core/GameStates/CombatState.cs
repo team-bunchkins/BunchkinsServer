@@ -29,6 +29,7 @@ namespace Bunchkins.Domain.Core.GameStates
         {
             if (input == RUN)
             {
+                string results = "";
                 foreach (MonsterCard monster in Monsters)
                 {
                     int diceRoll = Game.RandomGenerator.Next(1, 7);
@@ -36,16 +37,18 @@ namespace Bunchkins.Domain.Core.GameStates
                     {
                         // Bad Stuff!
                         monster.BadStuff(Game.ActivePlayer);
+                        if (results != "") results += "\n";
+                        results += "Could not escape " + monster.Name + "!";
                     }
                     else
                     {
                         // Player escaped!
-
+                        if (results != "") results += "\n";
+                        results += "Escaped from " + monster.Name + "!";
                     }
                 }
-
-                BunchkinsHub.EndCombatState(Game);
-                Game.SetState(new EndState(Game));
+                Game.SetState(new EndState(Game, 0, results));
+                // BunchkinsHub.EndCombatState(Game);
             }
             else if (input == PASS && !PlayersPassed.Any(p => p.Name == player.Name))
             {
@@ -62,10 +65,20 @@ namespace Bunchkins.Domain.Core.GameStates
                 {
                     int treasures = Monsters.Sum(m => m.TreasureGain) + PileOfTreasures;
 
-                    BunchkinsHub.EndCombatState(Game);
+                    string results = "";
+                    if (Monsters.Count() > 1)
+                    {
+                        results = "Defeated monsters!";
+                    }
+                    else
+                    {
+                        results = "Defeated monster!";
+                    }
+
+                    // BunchkinsHub.EndCombatState(Game);
                     player.IncreaseLevel(Monsters.Sum(m => m.LevelGain));
                     Game.LootTreasure(treasures);
-                    Game.SetState(new EndState(Game));
+                    Game.SetState(new EndState(Game, treasures, results));
                 }
                 // TODO: Error if player cannot defeat monster
             }
@@ -122,13 +135,13 @@ namespace Bunchkins.Domain.Core.GameStates
             if (Monsters.Count == 0 && isLootable)
             {
                 Game.LootTreasure(PileOfTreasures);
-                BunchkinsHub.EndCombatState(Game);
-                Game.SetState(new EndState(Game));
+                // BunchkinsHub.EndCombatState(Game);
+                Game.SetState(new EndState(Game, PileOfTreasures, "Escaped from combat with the loot!"));
             }
             else if (Monsters.Count == 0)
             {
-                BunchkinsHub.EndCombatState(Game);
-                Game.SetState(new EndState(Game));
+                // BunchkinsHub.EndCombatState(Game);
+                Game.SetState(new EndState(Game, 0, "Escaped from combat!"));
             }
             else
             {

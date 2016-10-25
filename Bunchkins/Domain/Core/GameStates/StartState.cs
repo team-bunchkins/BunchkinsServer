@@ -36,13 +36,13 @@ namespace Bunchkins.Domain.Core.GameStates
             else if (card is CurseCard)
             {
                 ((CurseCard)card).Cast(Game.ActivePlayer);
-                Game.SetState(new DrawState(Game));
+                Game.SetState(new DrawState(Game, card));
             }
             else
             {
                 //ADD TO HAND
                 Game.ActivePlayer.AddHandCard(card);
-                Game.SetState(new DrawState(Game));
+                Game.SetState(new DrawState(Game, card));
             }
             
         }
