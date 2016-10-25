@@ -1,6 +1,7 @@
 ﻿using Bunchkins.Domain.Cards;
 using Bunchkins.Domain.Cards.Treasure.Equipment;
 using Bunchkins.Domain.Players;
+using Bunchkins.Hubs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,6 +36,7 @@ namespace Bunchkins.Domain.Core.GameStates
             else
             {
                 Console.WriteLine("YOU DUN GOOFED, YOU CAN'T DO DAT YO!");
+                return;
             }
         }
     }
