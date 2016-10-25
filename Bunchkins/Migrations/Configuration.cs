@@ -162,7 +162,7 @@ namespace Bunchkins.Migrations
                 new EquipmentCard { Description = "Equipment Slot: 1 Hand", FlavorText = "For those who wanted to be a pirate but have dyxlesia.", Slot = "1Hand", Gold = 400, Bonus = 2, Name = "Buckler of Swashing", Type = "Equipment", PictureUrl = "equipment/BucklerofSwashing.jpg" },
                 new EquipmentCard { Description = "Equipment Slot: 1 Hand", FlavorText = "Any other mace would have been dull.", Slot = "1Hand", Gold = 600, Bonus = 4, Name = "Mace of Sharpness", Type = "Equipment", PictureUrl = "equipment/MaceofSharpness.jpg" },
                 new EquipmentCard { Description = "Equipment Slot: 1 Hand", FlavorText = "For todays rapper on the go.", Slot = "1Hand", Gold = 600, Bonus = 4, Name = "Hammer of Kneecapping", Type = "Equipment", PictureUrl = "equipment/HammerofKneecapping.jpg" },
-                new EquipmentCard { Description = "Equipment Slot: 1 Hand", FlavorText = "Pay it a dollar and it may holler.", Slot = "1Hand", Gold = 400, Bonus = 3, Name = "Gentlemen's Club", Type = "Equipment", PictureUrl = "equipment/GentlemensClub.jpg" },
+                new EquipmentCard { Description = "Equipment Slot: 1 Hand", FlavorText = "Pay it a dollar and it may holler.", Slot = "1Hand", Gold = 400, Bonus = 3, Name = "Gentlemen's Club", Type = "Equipment", PictureUrl = "equipment/GentlemensClub.jpg" }
 
             );
 
