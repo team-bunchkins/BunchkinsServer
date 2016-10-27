@@ -90,6 +90,7 @@ namespace Bunchkins.Domain.Core.GameStates
             {
                 ((IAnytimeSpell)card).Cast(target);
                 player.Discard(card);
+                BunchkinsHub.UpdateCombatState(Game, this);
             }
             else if (card is ICombatSpell)
             {
