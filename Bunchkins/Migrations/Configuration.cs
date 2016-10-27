@@ -101,7 +101,7 @@ namespace Bunchkins.Migrations
                 new LoseLevelCurseCard { Description = "Target Player Loses 2 Levels", FlavorText = "And here you thought it was a cute duck.", Name = "Duck of Doom", Levels = 2, Type = "Curse", PictureUrl = "curse/DuckOfDoom.jpg" },
                 new LoseLevelCurseCard { Description = "Target Player Loses 1 Level", FlavorText = "You used to be awsome, but you can't remember how anymore.", Name = "Amnesia", Levels = 1, Type = "Curse", PictureUrl = "curse/LoseLevel1.jpg" },
                 new LoseLevelCurseCard { Description = "Target Player Loses 1 Level", FlavorText = "Don't even try to blame it on the dog.", Name = "Shamefull Gas", Levels = 1, Type = "Curse", PictureUrl = "curse/LoseLevel2.jpg" },
-                new LoseLevelCurseCard { Description = "Target Player Loses 2 Level", FlavorText = "Lose 2 levels because you could not find Cameron to help you with your project.", Name = "Cameron", Levels = 2, Type = "Curse", PictureUrl = "curse/Cameron.jpg" },
+                new LoseLevelCurseCard { Description = "Target Player Loses 2 Levels", FlavorText = "You finally found Cameron, but it's too late.", Name = "Cameron", Levels = 2, Type = "Curse", PictureUrl = "curse/Cameron.jpg" },
 
                 //Treasure Cards
                 new LevelUpSpellCard { Description = "Gain 1 Level", FlavorText = "It did it's job.", Name = "Potion of General Studliness", Level = 1, Type = "Spell", PictureUrl = "spell/PotionOfGeneralStudliness.jpg" },
