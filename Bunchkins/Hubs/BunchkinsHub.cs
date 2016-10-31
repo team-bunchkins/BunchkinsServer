@@ -24,7 +24,14 @@ namespace Bunchkins.Hubs
         {
             // Reconnect player if already logged on?
 
-            // TODO: Come back to this - does user retain any other identity info?
+            // Context.QueryString[2] == {[username, value]}
+            // {[ key, value ]}
+
+            // check for username in QueryString
+            // if exists then reassign player to new connection
+            // send all the current info to that client 
+
+            // TODO: This is copied from backgammon example
             if (!string.IsNullOrEmpty(Context.User.Identity.Name))
             {
                 var player = GameManager.Instance.Players
@@ -178,9 +185,9 @@ namespace Bunchkins.Hubs
             Game game = GetGame(gameId);
             Player player = GetPlayer(playerName);
 
+            // Check if game exists for player to be removed from
             if (game == null)
             {
-                // Check if game exists for player to be removed from
                 Clients.Caller.displayError("Could not find game.");
                 return;
             }
@@ -188,8 +195,8 @@ namespace Bunchkins.Hubs
             {
                 // Remove player from game and game manager
                 Groups.Remove(player.ConnectionId, game.GameId.ToString());
-                GameManager.Instance.RemovePlayer(game, player);
                 Clients.Group(game.GameId.ToString()).playerLeft(player.Name);
+                GameManager.Instance.RemovePlayer(game, player);
             }
         }
 
