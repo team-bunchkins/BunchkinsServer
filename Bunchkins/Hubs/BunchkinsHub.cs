@@ -22,27 +22,23 @@ namespace Bunchkins.Hubs
 
         public override Task OnConnected()
         {
-            // Reconnect player if already logged on?
-
             // Context.QueryString[2] == {[username, value]}
             // {[ key, value ]}
 
             // check for username in QueryString
             // if exists then reassign player to new connection
             // send all the current info to that client 
-
-            // TODO: This is copied from backgammon example
-            if (!string.IsNullOrEmpty(Context.User.Identity.Name))
+            
+            if (Context.QueryString.Any(x => x.Key == "username") && Context.QueryString.Where(x => x.Key == "username").First().Value != "")
             {
-                var player = GameManager.Instance.Players
-                    .Where(x => x.Name == Context.User.Identity.Name)
-                    .SingleOrDefault();
+                var player = GetPlayer(Context.QueryString.Where(x => x.Key == "username").First().Value);
 
                 if (player != null)
                 {
                     player.ConnectionId = Context.ConnectionId;
                     player.Reconnecting = false;
-                    Clients.Caller.updateSelf(player.Name);
+
+                    // TODO: Implement on client side
                     Clients.Others.userReconnected(player.Name);
                 }
             }
