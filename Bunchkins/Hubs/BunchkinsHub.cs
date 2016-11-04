@@ -36,10 +36,50 @@ namespace Bunchkins.Hubs
                 if (player != null)
                 {
                     player.ConnectionId = Context.ConnectionId;
-                    player.Reconnecting = false;
+                    var game = GetGame(player);
 
-                    // TODO: Implement on client side
-                    Clients.Others.userReconnected(player.Name);
+                    // TODO: Implement on client side to notify others
+                    // Clients.Group(game.GameId.ToString()).userReconnected(player.Name);
+                    Groups.Add(player.ConnectionId, game.GameId.ToString());
+
+                    // Send game info if game is currently active
+                    // NOTE: If game hadn't started, player is removed on disconnect
+                    if (game.State != null)
+                    {
+                        // Send game info to client
+                        var gameDTO = new
+                        {
+                            GameId = game.GameId,
+                            ActivePlayer = game.ActivePlayer.Name
+                        };
+
+                        var playerDTO = new
+                        {
+                            Name = player.Name,
+                            Level = player.Level,
+                            CombatPower = player.CombatPower,
+                            Hand = player.Hand,
+                            EquippedCards = new
+                            {
+                                Headgear = player.EquippedCards.Where(e => e.Slot == "Headgear").SingleOrDefault(),
+                                Armor = player.EquippedCards.Where(e => e.Slot == "Armor").SingleOrDefault(),
+                                Footgear = player.EquippedCards.Where(e => e.Slot == "Footgear").SingleOrDefault(),
+                                Weapons = player.EquippedCards.Where(e => e.Slot == "1Hand" || e.Slot == "2Hands")
+                            }
+                        };
+
+                        var opponentsDTO = game.Players.Where(p => p.Name != player.Name).Select(o => new
+                        {
+                            Name = o.Name,
+                            Level = o.Level,
+                            CombatPower = o.CombatPower,
+                            HandSize = o.Hand.Count(),
+                            EquippedCards = o.EquippedCards
+                        });
+
+                        Clients.Caller.setGameInfo(gameDTO, playerDTO, opponentsDTO);
+                        UpdateState(game, game.State);
+                    }
                 }
             }
 
@@ -48,29 +88,23 @@ namespace Bunchkins.Hubs
 
         public override Task OnDisconnected(bool stopCalled)
         {
-            if (stopCalled)
+            // Check if disconnected client was in a game
+            if (Context.QueryString.Any(x => x.Key == "username") && Context.QueryString.Where(x => x.Key == "username").First().Value != "")
             {
-                string userName = Context.User.Identity.Name;
-                string connectionId = Context.ConnectionId;
-
-                var player = GameManager.Instance.Players
-                    .FirstOrDefault(p => p.Name == Context.User.Identity.Name);
+                var player = GetPlayer(Context.QueryString.Where(x => x.Key == "username").First().Value);
 
                 if (player != null)
                 {
-                    lock (player.ConnectionId)
-                    {
-                        player.Reconnecting = true;
-                        
-                        Clients.Others.userDisconnected(userName);
-                    }
-                }
-                Console.WriteLine(String.Format("Client {0} explicitly closed connection.", connectionId));
+                    player.ConnectionId = Context.ConnectionId;
+                    var game = GetGame(player);
 
-            }
-            else
-            {
-                Console.WriteLine(String.Format("Client {0} timed out.", Context.ConnectionId));
+                    // Remove player from game if game hasn't started
+                    if (game.State == null)
+                    {
+                        GameManager.Instance.RemovePlayer(game, player);
+                    }
+                    // TODO: Maybe put timeout, remove user from active game once time is up
+                }
             }
 
             return base.OnDisconnected(stopCalled);
