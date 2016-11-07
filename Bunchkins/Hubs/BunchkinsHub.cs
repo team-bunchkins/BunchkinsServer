@@ -141,11 +141,6 @@ namespace Bunchkins.Hubs
                 Clients.Caller.displayError("Username already exists.");
                 return;
             }
-            else if (GameManager.Instance.Players.Any(x => x.ConnectionId == Context.ConnectionId))
-            {
-                Clients.Caller.displayError("User is already in a game.");
-                return;
-            }
             else
             {
                 player = new Player
@@ -171,11 +166,6 @@ namespace Bunchkins.Hubs
             if (GameManager.Instance.Players.Any(x => x.Name == name))
             {
                 Clients.Caller.displayError("Username already exists.");
-                return;
-            }
-            else if (GameManager.Instance.Players.Any(x => x.ConnectionId == Context.ConnectionId))
-            {
-                Clients.Caller.displayError("User is already in a game.");
                 return;
             }
             else
