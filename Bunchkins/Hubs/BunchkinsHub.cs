@@ -28,10 +28,10 @@ namespace Bunchkins.Hubs
             // check for username in QueryString
             // if exists then reassign player to new connection
             // send all the current info to that client 
-            
-            if (Context.QueryString.Any(x => x.Key == "username") && Context.QueryString.Where(x => x.Key == "username").First().Value != "")
+
+            if (Context.QueryString["username"] != "")
             {
-                var player = GetPlayer(Context.QueryString.Where(x => x.Key == "username").First().Value);
+                var player = GetPlayer(Context.QueryString["username"]);
 
                 if (player != null)
                 {
@@ -89,22 +89,19 @@ namespace Bunchkins.Hubs
         public override Task OnDisconnected(bool stopCalled)
         {
             // Check if disconnected client was in a game
-            if (Context.QueryString.Any(x => x.Key == "username") && Context.QueryString.Where(x => x.Key == "username").First().Value != "")
+            // Check by ConnectionId! QueryString holds value from initial connection
+            Player player = GameManager.Instance.Players.Where(p => p.ConnectionId == Context.ConnectionId).SingleOrDefault();
+            if (player != null)
             {
-                var player = GetPlayer(Context.QueryString.Where(x => x.Key == "username").First().Value);
+                var game = GetGame(player);
 
-                if (player != null)
+                // Remove player from game if game hasn't started
+                if (game.State == null)
                 {
-                    player.ConnectionId = Context.ConnectionId;
-                    var game = GetGame(player);
-
-                    // Remove player from game if game hasn't started
-                    if (game.State == null)
-                    {
-                        GameManager.Instance.RemovePlayer(game, player);
-                    }
-                    // TODO: Maybe put timeout, remove user from active game once time is up
+                    GameManager.Instance.RemovePlayer(game, player);
+                    Clients.Group(game.GameId.ToString()).playerLeft(player.Name);
                 }
+                // TODO: Maybe put timeout, remove user from active game once time is up
             }
 
             return base.OnDisconnected(stopCalled);
