@@ -243,11 +243,23 @@ namespace Bunchkins.Hubs
                 {
                     Clients.Caller.displayError("Could not find card.");
                 }
-                else if ((game.State is CombatState && !(card is EquipmentCard)) || (!(game.State is CombatState) && !(card is ICombatSpell))) {
+                else if (game.State is CombatState && !(card is EquipmentCard)) {
+                    if (((CombatState)game.State).PlayersPassed.Any(p => p == player))
+                    {
+                        Clients.Caller.displayError("You have already passed!");
+                    }
+                    else
+                    {
+                        game.PlayCard(player, target, card);
+                    }
+                }
+                else if (!(game.State is CombatState) && !(card is ICombatSpell))
+                {
                     game.PlayCard(player, target, card);
                 }
                 else
                 {
+                    // generic error for cards played during inappropriate game states
                     Clients.Caller.displayError("This card cannot be played right now!");
                 }
             }
