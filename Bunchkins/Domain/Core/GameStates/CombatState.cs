@@ -5,6 +5,7 @@ using Bunchkins.Domain.Players;
 using Bunchkins.Domain.Cards.Door.Monsters;
 using static Bunchkins.Domain.Core.Input;
 using Bunchkins.Hubs;
+using System.Text.RegularExpressions;
 
 namespace Bunchkins.Domain.Core.GameStates
 {
@@ -39,6 +40,13 @@ namespace Bunchkins.Domain.Core.GameStates
                         monster.BadStuff(Game.ActivePlayer);
                         if (results != "") results += "\n";
                         results += "Could not escape " + monster.Name + "!";
+
+                        Regex regex = new Regex("^.*Bad Stuff:");
+                        string consequences = regex.Replace(monster.Description.ToString(), "");
+                        if (consequences != null && consequences.Length > 0)
+                        {
+                            results += "\n" + consequences;
+                        }
                     }
                     else
                     {
